@@ -1,0 +1,103 @@
+urdf:
+  path: ./urdf/Lite3.urdf
+  root_link: base_link
+  model_name: deeprobotics_lite3
+
+robot:
+  id: deeprobotics_lite3_01
+  display_name: "Deep Robotics Jueying Lite3"
+  family: quadruped_robot
+  root_part: base
+  dimensions:
+    length_m: 0.610
+    width_m: 0.370
+    height_m: 0.445
+  mass_kg: 12.2
+  passable_door_width_m: 0.60
+
+  exports:
+    - provider_id: lite3_quadruped
+      capabilities:
+        - path: robonix/primitive/chassis/driver
+          description: "Lite3 chassis lifecycle driver."
+        - path: robonix/primitive/chassis/move
+          description: "Short quadruped base motion commands."
+        - path: robonix/primitive/chassis/twist_in
+          description: "Velocity input for the Lite3 chassis."
+        - path: robonix/primitive/chassis/odom
+          description: "Lite3 chassis odometry."
+        - path: robonix/primitive/chassis/posture
+          description: "Lite3 stand and sit posture control."
+    - provider_id: rtabmap
+      capabilities:
+        - path: robonix/service/map/occupancy_grid
+          description: "Current RTAB-Map occupancy grid."
+        - path: robonix/service/map/pointcloud
+          description: "Accumulated RTAB-Map point cloud."
+        - path: robonix/service/map/pose
+          description: "Robot pose estimated by RTAB-Map."
+    - provider_id: nav2
+      capabilities:
+        - path: robonix/service/navigation/navigate
+          description: "Navigate the Lite3 to a 2D goal."
+        - path: robonix/service/navigation/status
+          description: "Report navigation status."
+        - path: robonix/service/navigation/cancel
+          description: "Cancel the active navigation goal."
+
+  components:
+    - id: base
+      type: mobile_base
+      urdf_link: base_link
+      exports: []
+      components:
+        - id: torso
+          type: body_part
+          urdf_link: TORSO
+          exports: []
+          components:
+            - id: mid360_lidar
+              type: lidar_3d
+              urdf_link: livox_frame
+              exports:
+                - provider_id: mid360_lidar
+                  capabilities:
+                    - path: robonix/primitive/lidar/driver
+                      description: "MID-360 lifecycle driver."
+                    - path: robonix/primitive/lidar/lidar3d
+                      description: "MID-360 PointCloud2 stream."
+                    - path: robonix/primitive/lidar/lidar_snapshot
+                      description: "One-shot lidar snapshot."
+              components: []
+            - id: front_camera
+              type: rgbd_camera
+              urdf_link: camera_link
+              exports:
+                - provider_id: orbbec_camera
+                  capabilities:
+                    - path: robonix/primitive/camera/driver
+                      description: "Orbbec camera lifecycle driver."
+                    - path: robonix/primitive/camera/rgb
+                      description: "Front RGB image stream."
+                    - path: robonix/primitive/camera/depth
+                      description: "Front depth image stream."
+                    - path: robonix/primitive/camera/extrinsics
+                      description: "Camera mount transform."
+                    - path: robonix/primitive/camera/snapshot
+                      description: "One-shot RGB image."
+                    - path: robonix/primitive/camera/depth_snapshot
+                      description: "One-shot depth image."
+              components: []
+
+description:
+  summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
+  can_do:
+    - "Stand, sit, move, turn, and publish chassis odometry."
+    - "Publish 3D lidar and RGB-D observations."
+    - "Build maps with RTAB-Map and navigate with Nav2."
+  cannot_do:
+    - "Manipulate objects; this deployment has no arm or gripper."
+    - "Use GNSS localization; navigation depends on the mapped area."
+  notes:
+    - "The URDF is the authoritative source for chassis and sensor frames."
+    - "RTAB-Map reuses the service-map-rbnx package used by Ranger Mini V3."
