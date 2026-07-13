@@ -49,6 +49,7 @@ primitive:
     config:
       odom_frame: odom
       base_frame: base_link
+      odom_topic: /odom
       odom_rate_hz: 20.0
       target_ip: 192.168.1.120
       target_port: 43893
@@ -108,7 +109,10 @@ service:
       use_sim_time: false
       subscribe_rgbd: true
       subscribe_scan_cloud: true
-      subscribe_odom: false
+      # Lite3 is the sole odom -> base_link authority. Do not start RTAB-Map's
+      # RGB-D odometry, which would create a competing TF publisher.
+      subscribe_odom: true
+      odom_topic: /odom
       rgb_topic: /camera/color/image_raw
       depth_topic: /camera/depth/image_raw
       camera_info_topic: /camera/color/camera_info
@@ -124,7 +128,9 @@ service:
     branch: main
     manifest: package_manifest.jetson-native.yaml
     config:
-      params_profile: default
+      # RTAB-Map publishes the live /map; do not start the default profile's
+      # AMCL/map_server localization stack on top of an online SLAM map.
+      params_profile: slam
       use_sim_time: false
       action_wait_s: 90.0
 

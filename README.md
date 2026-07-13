@@ -32,6 +32,10 @@ Stop the deployment with:
 ./stop.sh
 ```
 
+`stop.sh` is idempotent and also recovers interrupted boots: it reaps only
+processes and ProcessManager records belonging to this deployment, then checks
+that the Lite3 feedback port (UDP 43897) is free before returning success.
+
 The three scripts accept additional arguments and pass them directly to the
 corresponding `rbnx build`, `rbnx boot`, or `rbnx shutdown` command.
 

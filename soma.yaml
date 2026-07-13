@@ -21,7 +21,7 @@ robot:
         - path: robonix/primitive/chassis/driver
           description: "Lite3 chassis lifecycle driver."
         - path: robonix/primitive/chassis/move
-          description: "Short quadruped base motion commands."
+          description: "Internal low-level motion transport for the navigation stack. It bypasses collision checking and must never be called directly from Pilot or exposed as an MCP tool."
         - path: robonix/primitive/chassis/twist_in
           description: "Velocity input for the Lite3 chassis."
         - path: robonix/primitive/chassis/odom
@@ -40,9 +40,9 @@ robot:
       capabilities:
         - path: robonix/service/navigation/navigate
           description: "Navigate the Lite3 to a 2D goal."
-        - path: robonix/service/navigation/status
+        - path: robonix/service/navigation/navigate/status
           description: "Report navigation status."
-        - path: robonix/service/navigation/cancel
+        - path: robonix/service/navigation/navigate/cancel
           description: "Cancel the active navigation goal."
 
   components:
@@ -92,7 +92,7 @@ robot:
 description:
   summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
   can_do:
-    - "Stand, sit, move, turn, and publish chassis odometry."
+    - "Stand, sit, and publish chassis odometry; translational and rotational motion is performed only through collision-checked Nav2 navigation."
     - "Publish 3D lidar and RGB-D observations."
     - "Build maps with RTAB-Map and navigate with Nav2."
   cannot_do:
