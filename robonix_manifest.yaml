@@ -5,7 +5,10 @@ catalog:
   name: robonix.robot.deep_robotics.lite3
   version: 0.2.0
   description: Minimal Robonix deployment for the Deep Robotics Lite3.
+  license: Apache-2.0
   tags: [robot, deploy, deep_robotics, lite3, quadruped, jetson, lidar, rgbd, mapping, navigation]
+  maintainers:
+    - Bunnycxk <2501213313@stu.pku.edu.cn>
 
 env:
   # All native ROS 2 packages use the same Fast DDS RMW implementation.
