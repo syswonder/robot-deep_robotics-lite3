@@ -1,109 +1,93 @@
 #!/usr/bin/env bash
-set -uo pipefail
+set -euo pipefail
 
 DEPLOY_DIR="$(cd "$(dirname "$0")" && pwd)"
+MANIFEST="${ROBONIX_MANIFEST:-$DEPLOY_DIR/robonix_manifest.yaml}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 export ROBONIX_DEPLOY_DIR="$DEPLOY_DIR"
 
-[[ ! -f "$DEPLOY_DIR/.env" ]] || { set -a; source "$DEPLOY_DIR/.env"; set +a; }
+if [[ -f "$DEPLOY_DIR/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$DEPLOY_DIR/.env"
+  set +a
+fi
 
-# Normal path. A failed boot removes state.json, so shutdown may legitimately
-# fail even though Soma children are still alive; cleanup below is therefore
-# always executed.
-rbnx shutdown -f "$DEPLOY_DIR/robonix_manifest.yaml" "$@" || true
+[[ -f "/opt/ros/humble/setup.bash" ]] || {
+  echo "missing /opt/ros/humble/setup.bash; install ROS 2 Humble" >&2
+  exit 1
+}
+set +u
+# shellcheck disable=SC1091
+source /opt/ros/humble/setup.bash
+set -u
 
-# Terminate only processes whose command line belongs to this deployment's
-# local packages. Soma normally owns these; this is the recovery path for an
-# interrupted/failed boot where Soma did not get a chance to reap children.
-# Canonicalize this path: pgrep compares it with normalized paths in process
-# command lines, so a literal "robot-deep_robotics-lite3/.." never matches.
-LOCAL_ROOT="$(cd "$DEPLOY_DIR/.." && pwd)"
-patterns=(
-  "$LOCAL_ROOT/primitive-deep_robotics-lite3_quadruped"
-  "$LOCAL_ROOT/lite3_rbnx_ws/primitives/mid360_lidar_rbnx"
-  "$LOCAL_ROOT/lite3_rbnx_ws/services/rtabmap_rbnx"
-  "$LOCAL_ROOT/robonix/system/scene"
-  "$DEPLOY_DIR/rbnx-boot/cache/"
-  "/opt/ros/humble/bin/ros2 launch transfer transfer_launch.py"
-  "/opt/ros/humble/bin/ros2 launch livox_ros_driver2 msg_MID360_launch.py"
-  "/opt/ros/humble/bin/ros2 launch orbbec_camera"
-  # Python module entry points do not retain their checkout path in argv. If
-  # their Soma parent is interrupted they are re-parented to PID 1, so match
-  # the deployment-specific module names as well as the paths above.
-  "python3 -m lite3_quadruped.main"
-  "python3 -m mid360_driver.main"
-  "python3 -m lite3_description.main"
-  "python3 -m pcld2lscan_rbnx.atlas_bridge"
-  "python3 -m rtabmap_rbnx.main"
-  "python3 -m nav2_wrapper.atlas_bridge"
-  "python3 -m nav2_wrapper.velocity_guard"
-  "python3 -m orbbec_camera.main"
-  "python3 -m scene_service.service"
-  # Orphaned Nav2 launch children likewise contain no deployment path. This
-  # robot runs a single Nav2 stack, and leaving a second lifecycle manager or
-  # server alive causes duplicate node names and bond-heartbeat resets.
-  "/opt/ros/humble/lib/nav2_"
-)
-
-collect_pids() {
-  local pattern pid
-  for pattern in "${patterns[@]}"; do
-    while read -r pid; do
-      [[ -n "$pid" && "$pid" != "$$" && "$pid" != "$PPID" ]] && echo "$pid"
-    done < <(pgrep -f -- "$pattern" 2>/dev/null || true)
-  done | sort -u
+command -v rbnx >/dev/null 2>&1 || {
+  echo "rbnx not found; install Robonix and check PATH" >&2
+  exit 1
 }
 
-mapfile -t residual_pids < <(collect_pids)
-if ((${#residual_pids[@]})); then
-  echo "[stop] terminating residual deployment processes: ${residual_pids[*]}"
-  kill "${residual_pids[@]}" 2>/dev/null || true
+CACHE_ROOT="$DEPLOY_DIR/rbnx-boot/cache"
+
+collect_deployment_pids() {
+  local pid cwd
+  while read -r pid; do
+    [[ "$pid" =~ ^[0-9]+$ ]] || continue
+    [[ "$pid" != "$$" && "$pid" != "$PPID" ]] || continue
+    cwd="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
+    if [[ "$cwd" == "$CACHE_ROOT" || "$cwd" == "$CACHE_ROOT/"* ]]; then
+      printf '%s\n' "$pid"
+    fi
+  done < <(ps -u "$(id -u)" -o pid=)
+}
+
+terminate_deployment_orphans() {
+  local -a pids=() alive=()
+  local pid
+  mapfile -t pids < <(collect_deployment_pids)
+  ((${#pids[@]})) || return 0
+
+  echo "[stop] terminating deployment-owned residual processes: ${pids[*]}"
+  kill -TERM "${pids[@]}" 2>/dev/null || true
   for _ in {1..30}; do
     alive=()
-    for pid in "${residual_pids[@]}"; do
+    for pid in "${pids[@]}"; do
       kill -0 "$pid" 2>/dev/null && alive+=("$pid")
     done
     ((${#alive[@]} == 0)) && break
     sleep 0.2
   done
+
   if ((${#alive[@]})); then
-    echo "[stop] force-killing residual processes: ${alive[*]}"
+    echo "[stop] force-killing deployment-owned residual processes: ${alive[*]}"
     kill -KILL "${alive[@]}" 2>/dev/null || true
   fi
+}
+
+# Normal teardown is authoritative. Do not match and kill generic ROS/Nav2
+# process names because another deployment may be using the same host.
+if [[ -f "$DEPLOY_DIR/rbnx-boot/state.json" ]]; then
+  rbnx shutdown -f "$MANIFEST" "$@"
+else
+  echo "[stop] no Robonix boot state; checking deployment-owned residuals"
 fi
 
-# Fast DDS can leave zombie shared-memory lock files after a process is
-# interrupted or SIGKILLed. They prevent fresh ROS 2 participants from
-# discovering each other even when all package processes have been stopped.
-# Use Fast DDS' own cleaner so live shared-memory segments are preserved.
-FASTDDS_BIN="/opt/ros/humble/bin/fastdds"
-if [[ -x "$FASTDDS_BIN" ]]; then
-  "$FASTDDS_BIN" shm clean >/dev/null 2>&1 || true
+# A package wrapper can fail before Robonix records or tears down all of its
+# ROS children. Match residuals by cwd under this deployment's cache, not by
+# generic ROS/Nav2 process names, so other deployments on the host are safe.
+terminate_deployment_orphans
+
+# Fast DDS' cleaner removes stale shared-memory artifacts while preserving
+# segments that still belong to live participants.
+if [[ "$RMW_IMPLEMENTATION" == "rmw_fastrtps_cpp" && -x /opt/ros/humble/bin/fastdds ]]; then
+  /opt/ros/humble/bin/fastdds shm clean >/dev/null 2>&1 || true
 fi
 
-# Remove only this deployment's stale ProcessManager rows. Preserve records
-# owned by any other deployment sharing ~/.robonix/processes.json.
-PROCESS_STATE="$HOME/.robonix/processes.json"
-if [[ -f "$PROCESS_STATE" ]] && command -v jq >/dev/null 2>&1; then
-  tmp="${PROCESS_STATE}.tmp.$$"
-  jq --arg prefix "$DEPLOY_DIR/rbnx-boot/logs/" \
-    '[.[] | select(((.log_file // "") | startswith($prefix)) | not)]' \
-    "$PROCESS_STATE" > "$tmp" && mv "$tmp" "$PROCESS_STATE"
-fi
-
-# A clean restart requires the Lite3 UDP feedback port to be free.
-if ss -lunp 2>/dev/null | grep -qE ':43897\\b'; then
-  echo "[stop] ERROR: UDP 43897 is still occupied; refusing to report success" >&2
-  ss -lunp 2>/dev/null | grep -E ':43897\\b' >&2 || true
-  exit 1
-fi
-
-# Scene's web server is part of this deployment too. A stale native Scene
-# process can survive an interrupted boot without an rbnx state record; the
-# next Scene then reports ACTIVE before aborting because port 50107 is taken.
-if ss -ltnp 2>/dev/null | grep -qE ':50107\\b'; then
-  echo "[stop] ERROR: Scene web port 50107 is still occupied; refusing to report success" >&2
-  ss -ltnp 2>/dev/null | grep -E ':50107\\b' >&2 || true
+# jetson2motion must exclusively bind the Lite3 feedback port. Never kill an
+# unknown owner here; report it so the operator can inspect it safely.
+if ss -H -lunp 2>/dev/null | awk '$5 ~ /:43897$/ { found=1 } END { exit !found }'; then
+  echo "[stop] ERROR: UDP 43897 is still occupied after scoped cleanup" >&2
+  ss -H -lunp 2>/dev/null | awk '$5 ~ /:43897$/' >&2
   exit 1
 fi
 

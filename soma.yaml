@@ -12,30 +12,34 @@ robot:
     length_m: 0.610
     width_m: 0.370
     height_m: 0.445
+  # Conservative navigation envelope. The 0.68 m length covers the official
+  # sitting length; the 0.46 m width adds 45 mm clearance on each side of the
+  # official 0.37 m standing width for gait sway and leg motion.
+  footprint:
+    base_frame: base_link
+    points:
+      - [0.34, 0.23]
+      - [0.34, -0.23]
+      - [-0.34, -0.23]
+      - [-0.34, 0.23]
   mass_kg: 12.2
   passable_door_width_m: 0.60
 
   exports:
-    - provider_id: lite3_quadruped
+    - provider_id: lite3_description
       capabilities:
-        - path: robonix/primitive/chassis/driver
-          description: "Lite3 chassis lifecycle driver."
-        - path: robonix/primitive/chassis/move
-          description: "Internal low-level motion transport for the navigation stack. It bypasses collision checking and must never be called directly from Pilot or exposed as an MCP tool."
-        - path: robonix/primitive/chassis/twist_in
-          description: "Velocity input for the Lite3 chassis."
-        - path: robonix/primitive/chassis/odom
-          description: "Lite3 chassis odometry."
-        - path: robonix/primitive/chassis/posture
-          description: "Lite3 stand and sit posture control."
-    - provider_id: rtabmap
+        - path: robonix/primitive/lite3/description
+          description: "Publish the Lite3 URDF as /robot_description and TF."
+    - provider_id: mapping
       capabilities:
         - path: robonix/service/map/occupancy_grid
-          description: "Current RTAB-Map occupancy grid."
+          description: "Current 2D occupancy grid."
         - path: robonix/service/map/pointcloud
-          description: "Accumulated RTAB-Map point cloud."
+          description: "Fused 3D map point cloud."
         - path: robonix/service/map/pose
-          description: "Robot pose estimated by RTAB-Map."
+          description: "Robot pose in the map frame."
+        - path: robonix/service/map/odom
+          description: "Map-aware robot odometry."
     - provider_id: nav2
       capabilities:
         - path: robonix/service/navigation/navigate
@@ -44,12 +48,36 @@ robot:
           description: "Report navigation status."
         - path: robonix/service/navigation/navigate/cancel
           description: "Cancel the active navigation goal."
+    - provider_id: speech
+      capabilities:
+        - path: robonix/service/speech/asr
+          description: "Recognize speech received from the selected client microphone."
+        - path: robonix/service/speech/speak
+          description: "Synthesize speech and play it through the selected client speaker."
+    - provider_id: scene
+      capabilities:
+        - path: robonix/system/scene/list_objects
+          description: "List current semantic scene objects."
+        - path: robonix/system/scene/goal_near
+          description: "Find a reachable navigation goal near a known object."
 
   components:
     - id: base
       type: mobile_base
       urdf_link: base_link
-      exports: []
+      exports:
+        - provider_id: lite3_quadruped
+          capabilities:
+            - path: robonix/primitive/chassis/driver
+              description: "Lite3 chassis lifecycle driver."
+            - path: robonix/primitive/chassis/move
+              description: "Internal low-level motion transport for the navigation stack. It bypasses collision checking and must not be exposed directly as a Pilot/MCP motion tool."
+            - path: robonix/primitive/chassis/twist_in
+              description: "Velocity input for the Lite3 chassis."
+            - path: robonix/primitive/chassis/odom
+              description: "Lite3 chassis odometry and runtime motion state."
+            - path: robonix/primitive/chassis/posture
+              description: "Lite3 stand and sit posture control."
       components:
         - id: torso
           type: body_part
@@ -68,6 +96,15 @@ robot:
                       description: "MID-360 PointCloud2 stream."
                     - path: robonix/primitive/lidar/lidar_snapshot
                       description: "One-shot lidar snapshot."
+              components: []
+            - id: mid360_imu
+              type: imu
+              urdf_link: livox_frame
+              exports:
+                - provider_id: mid360_imu
+                  capabilities:
+                    - path: robonix/primitive/imu/imu
+                      description: "MID-360 internal 6-axis IMU stream."
               components: []
             - id: front_camera
               type: rgbd_camera
@@ -88,16 +125,29 @@ robot:
                     - path: robonix/primitive/camera/depth_snapshot
                       description: "One-shot depth image."
               components: []
+            - id: client_audio
+              type: audio_io
+              exports:
+                - provider_id: audio_client_bridge
+                  capabilities:
+                    - path: robonix/primitive/audio/mic
+                      description: "Receive microphone audio from robonix-client."
+                    - path: robonix/primitive/audio/speaker
+                      description: "Send synthesized audio to robonix-client."
+              components: []
 
 description:
   summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
   can_do:
     - "Stand, sit, and publish chassis odometry; translational and rotational motion is performed only through collision-checked Nav2 navigation."
-    - "Publish 3D lidar and RGB-D observations."
-    - "Build maps with RTAB-Map and navigate with Nav2."
+    - "Publish 3D lidar, 6-axis IMU, and RGB-D observations."
+    - "Build lidar and RGB-D maps with the mapping service and navigate with Nav2."
+    - "Accept text and remote voice turns through robonix-client."
   cannot_do:
     - "Manipulate objects; this deployment has no arm or gripper."
     - "Use GNSS localization; navigation depends on the mapped area."
   notes:
     - "The URDF is the authoritative source for chassis and sensor frames."
-    - "RTAB-Map reuses the service-map-rbnx package used by Ranger Mini V3."
+    - "The MID-360 IMU is the canonical IMU provider; the Orbbec IMU remains disabled to avoid duplicate providers."
+    - "Mapping uses service-map-rbnx with RTAB-Map, matching the Ranger Mini V3 integration."
+    - "Remote audio uses audio_client_bridge on TCP port 60002; expose it only on a trusted network."

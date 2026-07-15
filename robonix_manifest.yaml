@@ -8,7 +8,11 @@ catalog:
   tags: [robot, deploy, deep_robotics, lite3, quadruped, jetson, lidar, rgbd, mapping, navigation]
 
 env:
+  # All native ROS 2 packages use the same Fast DDS RMW implementation.
+  # Mixing RMW implementations makes topics and TF invisible across packages.
   ROS_DOMAIN_ID: "0"
+  RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+  ROBONIX_RMW_IMPLEMENTATION: rmw_fastrtps_cpp
   RBNX_BUILD_TARGET: jetson-native
   ROBONIX_SCENE_FORCE: native
   ROBONIX_SCENE_PLATFORM: jetson_orin
@@ -22,10 +26,16 @@ env:
   ROBONIX_NAV2_PLATFORM: jetson_orin
   SCENE_MAP_ID: lite3_lab
   MAPPING_MAPS_DIR: ${HOME}/.robonix/maps
+  SCENE_OBJECT_MEMORY_DB: ${HOME}/.robonix/scene/objects.db
+  SCENE_GRAPH_CACHE_DIR: ${HOME}/.robonix/scene/graph
+  SCENE_ANNOTATIONS_DIR: ${HOME}/.robonix/scene/annotations
+  SPEECH_BACKEND: tencent
 
 system:
-  atlas: {listen: 127.0.0.1:50051, log: info}
-  executor: {listen: 127.0.0.1:50061, log: info}
+  # Atlas, Executor, and Liaison must be reachable by robonix-client. Keep
+  # Pilot and Soma private to the robot host.
+  atlas: {listen: 0.0.0.0:50051, log: info}
+  executor: {listen: 0.0.0.0:50061, log: info}
   pilot:
     listen: 127.0.0.1:50071
     log: info
@@ -34,13 +44,15 @@ system:
       api_key: ${VLM_API_KEY}
       model: ${VLM_MODEL}
       api_format: openai
-  liaison: {listen: 127.0.0.1:50081, log: info}
+  liaison: {listen: 0.0.0.0:50081, log: info}
   soma:
     listen: 127.0.0.1:50091
     provider_id: soma
     robot_yaml: ${ROBONIX_DEPLOY_DIR}/soma.yaml
     log: info
-  scene: {log: info}
+  scene:
+    log: info
+    camera_provider_id: orbbec_camera
 
 primitive:
   - name: lite3_quadruped
@@ -58,16 +70,26 @@ primitive:
       sentinel_timeout_s: 30.0
 
   - name: mid360_lidar
-    # The Ranger Mini remote package currently lacks package.vendor required
-    # by this Robonix CLI. Use the validated Lite3 package until it is updated.
-    path: ../lite3_rbnx_ws/primitives/mid360_lidar_rbnx
+    url: https://github.com/syswonder/primitive-livox-mid360-lidar-rbnx
+    branch: main
     config:
       lidar_topic: /scanner/cloud
       imu_topic: /livox/imu
       lidar_ip: 192.168.1.3
+      host_ip: 192.168.1.102
       xfer_format: 0
       sentinel_timeout_s: 45.0
 
+  # Registers the IMU stream published by mid360_lidar as the standard
+  # Robonix IMU capability; it does not start a second Livox driver.
+  - name: mid360_imu
+    url: https://github.com/syswonder/primitive-livox-mid360-imu-rbnx
+    branch: main
+    config:
+      imu_topic: /livox/imu
+      sentinel_timeout_s: 45.0
+
+  # Lite3-specific URDF and fixed-joint TF publisher.
   - name: lite3_description
     url: https://github.com/syswonder/primitive-deep_robotics-lite3_description.git
     branch: main
@@ -89,6 +111,14 @@ primitive:
       enable_imu: false
       sentinel_timeout_s: 45.0
 
+  # robonix-client discovers this provider through Atlas and connects from
+  # the client to the robot. No client IP is stored in this deployment.
+  - name: audio_client_bridge
+    path: ${ROBONIX_SOURCE_PATH}/examples/webots/primitives/audio_client_bridge
+    config:
+      transport: reverse
+      listen_port: 60002
+
 service:
   - name: pcld2lscan
     url: https://github.com/syswonder/service-pcld2lscan-rbnx.git
@@ -97,31 +127,63 @@ service:
       scan_frame: livox_frame
       scan_rate_hz: 10.0
 
-  # Use the Lite3 RTAB-Map wrapper. The Ranger service-map package is left
-  # untouched because its generated ListMaps API is incompatible with the
-  # currently installed Robonix code generator.
-  - name: rtabmap
-    path: ../lite3_rbnx_ws/services/rtabmap_rbnx
+  - name: mapping
+    url: https://github.com/syswonder/service-map-rbnx
+    branch: main
+    manifest: package_manifest.jetson-native.yaml
     config:
+      algo: rtabmap
+      platform: jetson_orin
       base_frame: base_link
       odom_frame: odom
       map_frame: map
       use_sim_time: false
-      subscribe_rgbd: true
-      subscribe_scan_cloud: true
-      # Lite3 is the sole odom -> base_link authority. Do not start RTAB-Map's
-      # RGB-D odometry, which would create a competing TF publisher.
-      subscribe_odom: true
-      odom_topic: /odom
-      rgb_topic: /camera/color/image_raw
-      depth_topic: /camera/depth/image_raw
-      camera_info_topic: /camera/color/camera_info
-      scan_cloud_topic: /scanner/cloud
-      approx_sync: true
-      sentinel_timeout_s: 45.0
-      slam_args: "-d"
-      localization: false
-      enable_viz: false
+      map_id: lite3_lab
+      map_mode: mapping
+      # Keep the chassis as the sole odom -> base_link authority. Mapping
+      # consumes that odometry together with RGB-D and MID-360 observations.
+      rtabmap_inputs: [lidar, rgbd, odom]
+      deskew_lidar: true
+      occupancy_sources: [lidar]
+      rtabmap_params:
+        Reg/Strategy: 2
+        Vis/MaxDepth: 3.0
+        # Remove MID-360 returns on the robot itself before RTAB-Map writes
+        # the static occupancy grid. Without this filter, /map marks the
+        # robot's start cell as lethal and Navfn cannot create any path.
+        Grid/FootprintLength: 0.68
+        Grid/FootprintWidth: 0.46
+        # Reject invalid/near-zero MID-360 samples without hiding obstacles
+        # outside the footprint. This matches the validated Mini v3 guard.
+        Grid/RangeMin: 0.10
+      sensor_providers:
+        lidar3d: mid360_lidar
+        imu: mid360_imu
+        odom: lite3_quadruped
+        rgb: orbbec_camera
+        depth: orbbec_camera
+      sensors:
+        lidar2d: false
+        lidar3d: true
+        rgb: true
+        depth: true
+        imu: true
+        odom: true
+
+  - name: speech
+    path: ${ROBONIX_SOURCE_PATH}/services/speech
+    config:
+      speech_backend: tencent
+      disable_whisper: true
+      default_speaker_provider_id: audio_client_bridge
+      wake_words: ["罗伯特"]
+      tencent_asr_appid: ${TENCENT_ASR_APPID}
+      tencent_asr_engine: 16k_zh
+      tencent_tts_voice_type: 502003
+      tencent_tts_region: ap-guangzhou
+      tencent_tts_model_type: 1
+      tencent_tts_sample_rate: 16000
+      tencent_tts_codec: pcm
 
   - name: nav2
     url: https://github.com/syswonder/service-navigation-rbnx.git
@@ -130,8 +192,14 @@ service:
     config:
       # RTAB-Map publishes the live /map; do not start the default profile's
       # AMCL/map_server localization stack on top of an online SLAM map.
-      params_profile: slam
+      # Deployment-owned Lite3 tuning: external SLAM plus a gait-aware,
+      # replan-persistent terminal pose controller.
+      params_file: ${ROBONIX_DEPLOY_DIR}/config/nav2_params_lite3.yml
       use_sim_time: false
       action_wait_s: 90.0
+      provider_ids:
+        map: mapping
+        odom: lite3_quadruped
+        scan_cloud: mid360_lidar
 
 skill: []

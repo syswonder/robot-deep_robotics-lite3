@@ -1,6 +1,7 @@
 rbnx-build/
 rbnx-boot/
 .env
+.cache/
 .run/
 logs/
 .vscode/
