@@ -1,0 +1,55 @@
+# Lite3 RTAB-Map parameters. Keep chassis /odom as the only odometry source;
+# RTAB-Map uses RGB-D loop closures and MID-360 ICP to correct its drift in map.
+RGBD/CreateOccupancyGrid: true
+
+# Fuse the registered Orbbec depth image with the MID-360 cloud. Keep the
+# exported occupancy map planar for Nav2 even though the input lidar is 3D.
+Grid/Sensor: 2
+Grid/FromDepth: true
+Grid/RangeMax: 6.0
+Grid/RangeMin: 0.25
+Grid/CellSize: 0.05
+Grid/RayTracing: true
+Grid/3D: false
+Grid/NormalsSegmentation: true
+
+# These are the values used by the previous Lite3 rtabmap_rbnx deployment.
+# The 0.25 m near-field cutoff also rejects more body/leg returns while walking.
+Grid/MaxObstacleHeight: 1.5
+Grid/MaxGroundHeight: 0.1
+
+# Official static length/width are 0.61 x 0.37 m. Use the larger authoritative
+# gait-aware envelope declared in soma.yaml to remove body/leg returns before
+# writing the occupancy grid.
+Grid/FootprintLength: 0.68
+Grid/FootprintWidth: 0.46
+
+# Visual registration is fragile in low-texture corridors and across Lite3's
+# in-place turns. Use MID-360 ICP for pose registration; RGB-D remains enabled
+# for occupancy generation. Force3DoF prevents gait roll/pitch bending the map.
+Reg/Strategy: 1
+Reg/Force3DoF: true
+Optimizer/Strategy: 1
+Optimizer/GravitySigma: 0
+RGBD/NeighborLinkRefining: true
+RGBD/ProximityBySpace: true
+# Limit spatial proximity search to the nearest path neighbor. This preserves
+# useful corridor loop closures while reducing ambiguous parallel-wall links.
+RGBD/ProximityPathMaxNeighbors: 1
+RGBD/AngularUpdate: 0.05
+RGBD/LinearUpdate: 0.05
+# Mem/IncrementalMemory remains mode-owned by service-map-rbnx: true while
+# mapping and false while localizing. Do not override it in this shared file.
+Mem/NotLinkedNodesKept: true
+Vis/MinInliers: 12
+Vis/MaxDepth: 3.0
+# At the recommended 0.10-0.15 m/s manual mapping speed, 2 Hz gives 5-7.5 cm
+# between updates and matches the previous Lite3 deployment without starving
+# RGB-D/scan-cloud synchronization on the Jetson.
+Rtabmap/DetectionRate: 2.0
+
+# Reject implausible frame-to-frame corrections instead of allowing a single
+# weak corridor match to rotate or translate the whole local trajectory.
+Icp/MaxCorrespondenceDistance: 0.2
+Icp/MaxTranslation: 0.5
+Icp/MaxRotation: 0.78

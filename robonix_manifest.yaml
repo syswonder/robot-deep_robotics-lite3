@@ -11,11 +11,10 @@ catalog:
     - Bunnycxk <2501213313@stu.pku.edu.cn>
 
 env:
-  # All native ROS 2 packages use the same Fast DDS RMW implementation.
+  # Single-host ROS 2 transport. start.sh owns the local rmw_zenohd;
   # Mixing RMW implementations makes topics and TF invisible across packages.
   ROS_DOMAIN_ID: "0"
-  RMW_IMPLEMENTATION: rmw_fastrtps_cpp
-  ROBONIX_RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+  RMW_IMPLEMENTATION: rmw_zenoh_cpp
   RBNX_BUILD_TARGET: jetson-native
   ROBONIX_SCENE_FORCE: native
   ROBONIX_SCENE_PLATFORM: jetson_orin
@@ -27,7 +26,7 @@ env:
   MAPPING_WEBUI_PORT: "8091"
   ROBONIX_NAV2_FORCE: native
   ROBONIX_NAV2_PLATFORM: jetson_orin
-  SCENE_MAP_ID: lite3_lab
+  SCENE_MAP_ID: 3f_full_lite3
   MAPPING_MAPS_DIR: ${HOME}/.robonix/maps
   SCENE_OBJECT_MEMORY_DB: ${HOME}/.robonix/scene/objects.db
   SCENE_GRAPH_CACHE_DIR: ${HOME}/.robonix/scene/graph
@@ -92,12 +91,12 @@ primitive:
       imu_topic: /livox/imu
       sentinel_timeout_s: 45.0
 
-  # Lite3-specific URDF and fixed-joint TF publisher.
-  - name: lite3_description
-    url: https://github.com/syswonder/primitive-deep_robotics-lite3_description.git
+  # Publishes the Soma-owned Lite3 URDF as /robot_description and the standard
+  # TF tree. Soma remains the single authoritative source for the robot model.
+  - name: robot_description
+    url: https://github.com/syswonder/primitive-robot-description-rbnx
     branch: main
-    config:
-      urdf_path: deep_robotics_model/Lite3/Lite3_urdf/urdf/Lite3.urdf
+    manifest: package_manifest.native.yaml
 
   - name: orbbec_camera
     url: https://github.com/syswonder/primitive-orbbec-camera.git
@@ -136,42 +135,23 @@ service:
     manifest: package_manifest.jetson-native.yaml
     config:
       algo: rtabmap
-      platform: jetson_orin
       base_frame: base_link
       odom_frame: odom
-      map_frame: map
       use_sim_time: false
-      map_id: lite3_lab
-      map_mode: mapping
-      # Keep the chassis as the sole odom -> base_link authority. Mapping
-      # consumes that odometry together with RGB-D and MID-360 observations.
-      rtabmap_inputs: [lidar, rgbd, odom]
+      map_id: 3f_full_lite3
+      map_mode: localization
+      # Keep the chassis as the sole odom -> base_link authority. RTAB-Map
+      # localizes against the saved database using RGB-D and MID-360 data.
       deskew_lidar: true
-      occupancy_sources: [lidar]
-      rtabmap_params:
-        Reg/Strategy: 2
-        Vis/MaxDepth: 3.0
-        # Remove MID-360 returns on the robot itself before RTAB-Map writes
-        # the static occupancy grid. Without this filter, /map marks the
-        # robot's start cell as lethal and Navfn cannot create any path.
-        Grid/FootprintLength: 0.68
-        Grid/FootprintWidth: 0.46
-        # Reject invalid/near-zero MID-360 samples without hiding obstacles
-        # outside the footprint. This matches the validated Mini v3 guard.
-        Grid/RangeMin: 0.10
+      # Occupancy fusion is selected in config/rtabmap_params.yaml through
+      # Grid/Sensor and Grid/FromDepth. Do not also set occupancy_sources here.
+      params_file: config/rtabmap_params.yaml
       sensor_providers:
         lidar3d: mid360_lidar
         imu: mid360_imu
         odom: lite3_quadruped
         rgb: orbbec_camera
         depth: orbbec_camera
-      sensors:
-        lidar2d: false
-        lidar3d: true
-        rgb: true
-        depth: true
-        imu: true
-        odom: true
 
   - name: speech
     path: ${ROBONIX_SOURCE_PATH}/services/speech
@@ -193,16 +173,21 @@ service:
     branch: main
     manifest: package_manifest.jetson-native.yaml
     config:
-      # RTAB-Map publishes the live /map; do not start the default profile's
-      # AMCL/map_server localization stack on top of an online SLAM map.
-      # Deployment-owned Lite3 tuning: external SLAM plus a gait-aware,
+      # RTAB-Map publishes the saved /map and map -> odom localization TF; do
+      # not start a second AMCL/map_server localization stack on top of it.
+      # Deployment-owned Lite3 tuning: external localization plus a gait-aware,
       # replan-persistent terminal pose controller.
-      params_file: ${ROBONIX_DEPLOY_DIR}/config/nav2_params_lite3.yml
+      params_file: config/nav2_params_lite3.yml
+      # Conservative recovery flow: replan, clear costmaps, and wait. It never
+      # commands Nav2's generic Spin or BackUp recoveries on the quadruped.
+      bt_xml_file: config/navigate.xml
       use_sim_time: false
       action_wait_s: 90.0
+      # /scanner/scan is produced by the dedicated pcld2lscan service and is
+      # referenced directly by nav2_params_lite3.yml. Do not also enable
+      # Nav2's PointCloud2 projection for the same MID-360 stream.
       provider_ids:
         map: mapping
         odom: lite3_quadruped
-        scan_cloud: mid360_lidar
 
 skill: []

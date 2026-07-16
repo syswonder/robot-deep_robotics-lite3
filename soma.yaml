@@ -26,9 +26,9 @@ robot:
   passable_door_width_m: 0.60
 
   exports:
-    - provider_id: lite3_description
+    - provider_id: robot_description
       capabilities:
-        - path: robonix/primitive/lite3/description
+        - path: robonix/primitive/robot_description/driver
           description: "Publish the Lite3 URDF as /robot_description and TF."
     - provider_id: mapping
       capabilities:
