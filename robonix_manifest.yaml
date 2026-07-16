@@ -58,13 +58,19 @@ system:
 
 primitive:
   - name: lite3_quadruped
+    # Disable the chassis odom TF while retaining /lite3/odom as a diagnostic
+    # topic. This lets RTAB-Map's ICP odometry be the sole odom -> base_link
+    # authority.
     url: https://github.com/syswonder/primitive-deep_robotics-lite3_quadruped.git
     branch: main
     config:
       odom_frame: odom
       base_frame: base_link
-      odom_topic: /odom
+      # Raw chassis odometry is retained only for diagnostics. The canonical
+      # /odom topic and odom -> base_link TF are owned by ICP odometry below.
+      odom_topic: /lite3/odom
       odom_rate_hz: 20.0
+      publish_odom_tf: false
       target_ip: 192.168.1.120
       target_port: 43893
       local_port: 43897
@@ -140,8 +146,10 @@ service:
       use_sim_time: false
       map_id: 3f_full_lite3
       map_mode: localization
-      # Keep the chassis as the sole odom -> base_link authority. RTAB-Map
-      # localizes against the saved database using RGB-D and MID-360 data.
+      # With no external odom provider, service-map-rbnx starts
+      # rtabmap_odom/icp_odometry from the MID-360 cloud. The Lite3 primitive
+      # still publishes /lite3/odom for diagnostics, but publish_odom_tf=false keeps
+      # it out of the localization TF chain.
       deskew_lidar: true
       # Occupancy fusion is selected in config/rtabmap_params.yaml through
       # Grid/Sensor and Grid/FromDepth. Do not also set occupancy_sources here.
@@ -149,7 +157,6 @@ service:
       sensor_providers:
         lidar3d: mid360_lidar
         imu: mid360_imu
-        odom: lite3_quadruped
         rgb: orbbec_camera
         depth: orbbec_camera
 
@@ -183,11 +190,16 @@ service:
       bt_xml_file: config/navigate.xml
       use_sim_time: false
       action_wait_s: 90.0
+      # Nav2's controller, local costmap and velocity guard use the canonical
+      # /odom stream and odom -> base_link TF produced by mapping's
+      # rtabmap_odom/icp_odometry. Do not resolve the chassis odometry contract
+      # here: /lite3/odom is retained for diagnostics only.
+      topic_remap:
+        odom: /odom
       # /scanner/scan is produced by the dedicated pcld2lscan service and is
       # referenced directly by nav2_params_lite3.yml. Do not also enable
       # Nav2's PointCloud2 projection for the same MID-360 stream.
       provider_ids:
         map: mapping
-        odom: lite3_quadruped
 
 skill: []

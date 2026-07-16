@@ -1,5 +1,6 @@
-# Lite3 RTAB-Map parameters. Keep chassis /odom as the only odometry source;
-# RTAB-Map uses RGB-D loop closures and MID-360 ICP to correct its drift in map.
+# Lite3 RTAB-Map parameters. The deployment omits the chassis odom provider,
+# so service-map-rbnx starts MID-360 ICP odometry as odom -> base_link.
+# Raw chassis odometry remains available separately on /lite3/odom.
 RGBD/CreateOccupancyGrid: true
 
 # Fuse the registered Orbbec depth image with the MID-360 cloud. Keep the
@@ -43,10 +44,10 @@ RGBD/LinearUpdate: 0.05
 Mem/NotLinkedNodesKept: true
 Vis/MinInliers: 12
 Vis/MaxDepth: 3.0
-# At the recommended 0.10-0.15 m/s manual mapping speed, 2 Hz gives 5-7.5 cm
-# between updates and matches the previous Lite3 deployment without starving
-# RGB-D/scan-cloud synchronization on the Jetson.
-Rtabmap/DetectionRate: 2.0
+# At the recommended 0.10-0.15 m/s manual mapping speed, 1 Hz gives 10-15 cm
+# between updates while leaving enough Jetson capacity for RGB-D/scan-cloud
+# synchronization and ICP odometry.
+Rtabmap/DetectionRate: 1.0
 
 # Reject implausible frame-to-frame corrections instead of allowing a single
 # weak corridor match to rotate or translate the whole local trajectory.
