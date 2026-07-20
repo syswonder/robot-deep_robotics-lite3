@@ -1,6 +1,5 @@
-# Lite3 RTAB-Map parameters. The deployment omits the chassis odom provider,
-# so service-map-rbnx starts MID-360 ICP odometry as odom -> base_link.
-# Raw chassis odometry remains available separately on /lite3/odom.
+# Lite3 RTAB-Map parameters. The deployment intentionally omits the inaccurate
+# chassis odom provider, so MID-360 ICP owns odom -> base_link.
 RGBD/CreateOccupancyGrid: true
 
 # Fuse the registered Orbbec depth image with the MID-360 cloud. Keep the

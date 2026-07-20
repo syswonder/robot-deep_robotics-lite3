@@ -32,12 +32,16 @@ planner_server:
       plugin: "nav2_navfn_planner/NavfnPlanner"
       tolerance: 0.5
       allow_unknown: false
-    tf_buffer_duration: 0.5  # 秒
+    # MID-360 ICP odometry and projected scans are processed asynchronously and
+    # currently arrive about 0.4-0.5 s behind wall time. Keep enough TF history
+    # for costmap message filters to resolve the scan timestamp reliably.
+    tf_buffer_duration: 10.0
 
 
 controller_server:
   ros__parameters:
     use_sim_time: false
+    tf_buffer_duration: 10.0
     controller_frequency: 5.0
     # min_x_velocity_threshold: 0.01
     # min_y_velocity_threshold: 0.01
@@ -113,7 +117,7 @@ bt_navigator:
   ros__parameters:
     use_sim_time: false
     default_bt_xml_filename: "__ROBONIX_BT_XML__"
-    tf_buffer_duration: 0.5
+    tf_buffer_duration: 10.0
 
 recoveries_server:
   ros__parameters:
@@ -124,7 +128,9 @@ local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 10.0
-      publish_frequency: 10.0
+      # Updating stays fast for control, while RViz publication is throttled to
+      # keep visualization overhead low on Jetson.
+      publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: false
@@ -132,8 +138,11 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
-      footprint: "[ [0.34, 0.23], [0.34, -0.23], [-0.34, -0.23], [-0.34, 0.23] ]"
-      footprint_padding: 0.05
+      # Lite3 Explorer physical size is 0.610 x 0.370 m. Four centimetres of
+      # costmap padding per side gives a 0.690 x 0.450 m navigation envelope
+      # without inflating the scan self-filter radius.
+      footprint: "[ [0.305, 0.185], [0.305, -0.185], [-0.305, -0.185], [-0.305, 0.185] ]"
+      footprint_padding: 0.04
       # robot_radius: 0.32
 
       plugins: ["obstacle_layer", "inflation_layer"]
@@ -143,12 +152,21 @@ local_costmap:
         observation_sources: scan
         scan:
           topic: /scanner/scan
+          data_type: "LaserScan"
           max_obstacle_height: 2.0
+          obstacle_min_range: 0.0
+          obstacle_max_range: 2.5
+          raytrace_min_range: 0.0
+          raytrace_max_range: 3.0
+          tf_filter_tolerance: 1.0
+          inf_is_valid: true
+          # ICP odometry and scan deskewing intentionally buffer the cloud until
+          # odom -> base_link exists. Keep an accepted obstacle through the
+          # resulting sub-second scan jitter instead of clearing it between scans.
+          observation_persistence: 1.00
+          expected_update_rate: 1.00
           marking: true
           clearing: true
-          qos:
-            reliability: best_effort
-            durability: volatile
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -163,8 +181,8 @@ global_costmap:
       global_frame: map          # 通常是 map
       robot_base_frame: base_link
       # robot_radius: 0.32
-      footprint: "[ [0.34, 0.23], [0.34, -0.23], [-0.34, -0.23], [-0.34, 0.23] ]"
-      footprint_padding: 0.05
+      footprint: "[ [0.305, 0.185], [0.305, -0.185], [-0.305, -0.185], [-0.305, 0.185] ]"
+      footprint_padding: 0.04
       update_frequency: 1.0      # 更新频率（Hz），比 local_costmap 低即可
       publish_frequency: 1.0     # 发布频率
       resolution: 0.05           # 分辨率，建议和地图一致
@@ -184,14 +202,26 @@ global_costmap:
         observation_sources: scan
         scan:
           topic: /scanner/scan
+          data_type: "LaserScan"
           max_obstacle_height: 2.0
+          obstacle_min_range: 0.0
+          obstacle_max_range: 2.5
+          raytrace_min_range: 0.0
+          raytrace_max_range: 3.0
+          tf_filter_tolerance: 1.0
+          inf_is_valid: true
+          observation_persistence: 1.00
+          expected_update_rate: 1.00
           marking: true
           clearing: true
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
-        inflation_radius: 2.00
+        # Match the local controller's clearance envelope. A 2 m global
+        # inflation radius can make nearly every corridor prohibitively costly.
+        inflation_radius: 0.60
+        cost_scaling_factor: 2.2
 
 
 lifecycle_manager:

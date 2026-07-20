@@ -12,16 +12,17 @@ robot:
     length_m: 0.610
     width_m: 0.370
     height_m: 0.445
-  # Conservative navigation envelope. The 0.68 m length covers the official
-  # sitting length; the 0.46 m width adds 45 mm clearance on each side of the
-  # official 0.37 m standing width for gait sway and leg motion.
+  # Physical plan-view envelope for the Lite3 Explorer. Navigation clearance
+  # is added separately with costmap footprint_padding; keeping this footprint
+  # physical also prevents scan projection from creating an oversized circular
+  # self-filter blind zone.
   footprint:
     base_frame: base_link
     points:
-      - [0.34, 0.23]
-      - [0.34, -0.23]
-      - [-0.34, -0.23]
-      - [-0.34, 0.23]
+      - [0.305, 0.185]
+      - [0.305, -0.185]
+      - [-0.305, -0.185]
+      - [-0.305, 0.185]
   mass_kg: 12.2
   passable_door_width_m: 0.60
 

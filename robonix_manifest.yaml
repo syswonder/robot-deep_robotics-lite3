@@ -27,6 +27,7 @@ env:
   ROBONIX_NAV2_FORCE: native
   ROBONIX_NAV2_PLATFORM: jetson_orin
   SCENE_MAP_ID: 3f_full_lite3
+  SCENE_RESTORE_ON_START: "true"
   MAPPING_MAPS_DIR: ${HOME}/.robonix/maps
   SCENE_OBJECT_MEMORY_DB: ${HOME}/.robonix/scene/objects.db
   SCENE_GRAPH_CACHE_DIR: ${HOME}/.robonix/scene/graph
@@ -58,16 +59,14 @@ system:
 
 primitive:
   - name: lite3_quadruped
-    # Disable the chassis odom TF while retaining /lite3/odom as a diagnostic
-    # topic. This lets RTAB-Map's ICP odometry be the sole odom -> base_link
-    # authority.
+    # Keep chassis odometry diagnostic-only. RTAB-Map ICP remains the sole
+    # odom -> base_link authority because chassis odometry is not accurate
+    # enough for navigation localization.
     url: https://github.com/syswonder/primitive-deep_robotics-lite3_quadruped.git
     branch: main
     config:
       odom_frame: odom
       base_frame: base_link
-      # Raw chassis odometry is retained only for diagnostics. The canonical
-      # /odom topic and odom -> base_link TF are owned by ICP odometry below.
       odom_topic: /lite3/odom
       odom_rate_hz: 20.0
       publish_odom_tf: false
@@ -128,13 +127,6 @@ primitive:
       listen_port: 60002
 
 service:
-  - name: pcld2lscan
-    url: https://github.com/syswonder/service-pcld2lscan-rbnx.git
-    branch: main
-    config:
-      scan_frame: livox_frame
-      scan_rate_hz: 10.0
-
   - name: mapping
     url: https://github.com/syswonder/service-map-rbnx
     branch: main
@@ -146,10 +138,8 @@ service:
       use_sim_time: false
       map_id: 3f_full_lite3
       map_mode: localization
-      # With no external odom provider, service-map-rbnx starts
-      # rtabmap_odom/icp_odometry from the MID-360 cloud. The Lite3 primitive
-      # still publishes /lite3/odom for diagnostics, but publish_odom_tf=false keeps
-      # it out of the localization TF chain.
+      # With no external odom provider, service-map-rbnx starts MID-360 ICP
+      # odometry and publishes the navigation odom -> base_link TF.
       deskew_lidar: true
       # Occupancy fusion is selected in config/rtabmap_params.yaml through
       # Grid/Sensor and Grid/FromDepth. Do not also set occupancy_sources here.
@@ -190,16 +180,34 @@ service:
       bt_xml_file: config/navigate.xml
       use_sim_time: false
       action_wait_s: 90.0
-      # Nav2's controller, local costmap and velocity guard use the canonical
-      # /odom stream and odom -> base_link TF produced by mapping's
-      # rtabmap_odom/icp_odometry. Do not resolve the chassis odometry contract
-      # here: /lite3/odom is retained for diagnostics only.
-      topic_remap:
-        odom: /odom
-      # /scanner/scan is produced by the dedicated pcld2lscan service and is
-      # referenced directly by nav2_params_lite3.yml. Do not also enable
-      # Nav2's PointCloud2 projection for the same MID-360 stream.
+      # Project the MID-360 cloud in base_link, remove returns inside the Soma
+      # footprint, reject isolated scan speckles, and publish the canonical
+      # /scanner/scan consumed by both Nav2 costmaps and the velocity guard.
+      # Keeping this conversion inside navigation avoids the incompatible QoS
+      # and duplicate scan publishers seen with the legacy pcld2lscan service.
+      scan_projection:
+        enabled: true
+        target_frame: base_link
+        # base_link is at the torso centre and the lidar is 0.10 m above it.
+        # This band excludes the floor while retaining human legs and torso.
+        min_height_m: 0.10
+        max_height_m: 1.50
+        range_max_m: 12.0
+        # The legacy Lite3 projection used a much smaller range_min (0.03 m in
+        # the deployed adapter, 0.30 m in its Lite3 example). Adding another
+        # 5 cm to the footprint circumscribed radius made nearby walls and door
+        # posts disappear before contact. Keep only the footprint-derived
+        # exclusion until navigation supports an explicit range_min override.
+        self_filter_margin_m: 0.0
+        transform_tolerance_s: 0.15
+        # Buffer the raw cloud until ICP has published transforms covering the
+        # scan interval. This preserves the real sensor timestamp while making
+        # the transform history available before /scanner/scan reaches Nav2.
+        deskewing: true
+        deskew_fixed_frame: odom
+        deskew_wait_for_transform_s: 1.0
       provider_ids:
         map: mapping
+        scan_cloud: mid360_lidar
 
 skill: []
