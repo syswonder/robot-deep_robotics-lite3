@@ -59,17 +59,17 @@ system:
 
 primitive:
   - name: lite3_quadruped
-    # Keep chassis odometry diagnostic-only. RTAB-Map ICP remains the sole
-    # odom -> base_link authority because chassis odometry is not accurate
-    # enough for navigation localization.
+    # Chassis owns Nav2's low-latency odom -> base_link chain and publishes
+    # the upstream-standard /odom topic. Mapping keeps its ICP trajectory in the private odom_icp
+    # frame, so enabling this TF does not create a competing publisher.
     url: https://github.com/syswonder/primitive-deep_robotics-lite3_quadruped.git
     branch: main
     config:
       odom_frame: odom
       base_frame: base_link
-      odom_topic: /lite3/odom
+      odom_topic: /odom
       odom_rate_hz: 20.0
-      publish_odom_tf: false
+      publish_odom_tf: true
       target_ip: 192.168.1.120
       target_port: 43893
       local_port: 43897
@@ -128,18 +128,29 @@ primitive:
 
 service:
   - name: mapping
+    # Upstream split-odometry mode keeps RTAB-Map/ICP localization independent
+    # while navigation receives low-latency chassis odometry.
     url: https://github.com/syswonder/service-map-rbnx
     branch: main
     manifest: package_manifest.jetson-native.yaml
     config:
       algo: rtabmap
       base_frame: base_link
-      odom_frame: odom
+      # ICP owns this private frame only as an Odometry message; it does not
+      # broadcast odom_icp -> base_link, so it cannot conflict with chassis TF.
+      odom_frame: odom_icp
       use_sim_time: false
       map_id: 3f_full_lite3
       map_mode: localization
-      # With no external odom provider, service-map-rbnx starts MID-360 ICP
-      # odometry and publishes the navigation odom -> base_link TF.
+      # The bridge composes RTAB-Map's map -> odom_icp localization with the
+      # time-aligned ICP and chassis poses, then publishes the sole map -> odom
+      # correction consumed by Nav2.
+      navigation_odom_bridge: true
+      navigation_odom_topic: /odom
+      navigation_odom_frame: odom
+      # Mapping is no longer in Nav2's real-time obstacle path. Deskew the
+      # MID-360 input inside ICP for the best rotational odometry quality;
+      # navigation's independent /scanner/scan projection remains un-deskewed.
       deskew_lidar: true
       # Occupancy fusion is selected in config/rtabmap_params.yaml through
       # Grid/Sensor and Grid/FromDepth. Do not also set occupancy_sources here.
@@ -166,7 +177,7 @@ service:
       tencent_tts_codec: pcm
 
   - name: nav2
-    url: https://github.com/syswonder/service-navigation-rbnx.git
+    url: https://github.com/syswonder/service-navigation-rbnx
     branch: main
     manifest: package_manifest.jetson-native.yaml
     config:
@@ -188,26 +199,20 @@ service:
       scan_projection:
         enabled: true
         target_frame: base_link
-        # base_link is at the torso centre and the lidar is 0.10 m above it.
+        # base_link is at the torso centre; URDF places the lidar 4.5 cm
+        # forward and 0.10 m above it.
         # This band excludes the floor while retaining human legs and torso.
         min_height_m: 0.10
         max_height_m: 1.50
         range_max_m: 12.0
-        # The legacy Lite3 projection used a much smaller range_min (0.03 m in
-        # the deployed adapter, 0.30 m in its Lite3 example). Adding another
-        # 5 cm to the footprint circumscribed radius made nearby walls and door
-        # posts disappear before contact. Keep only the footprint-derived
-        # exclusion until navigation supports an explicit range_min override.
+        # Upstream navigation uses Soma's physical footprint to derive its
+        # circular projection self-filter (about 0.36 m for Lite3).
         self_filter_margin_m: 0.0
-        transform_tolerance_s: 0.15
-        # Buffer the raw cloud until ICP has published transforms covering the
-        # scan interval. This preserves the real sensor timestamp while making
-        # the transform history available before /scanner/scan reaches Nav2.
-        deskewing: true
-        deskew_fixed_frame: odom
-        deskew_wait_for_transform_s: 1.0
       provider_ids:
         map: mapping
+        # Nav2 consumes chassis velocities directly; Mapping's bridge uses the
+        # same stream only to express ICP localization as map -> odom.
+        odom: lite3_quadruped
         scan_cloud: mid360_lidar
 
 skill: []

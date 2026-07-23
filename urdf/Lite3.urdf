@@ -58,7 +58,7 @@
     </joint>
 
     <!-- ================================================================== -->
-    <!-- Livox MID-360 LiDAR — same mount position as UniLidar L2           -->
+    <!-- Livox MID-360 LiDAR — mounted 4.5 cm forward of the torso centre   -->
     <!-- ================================================================== -->
     <link name="livox_frame">
         <inertial>
@@ -69,7 +69,8 @@
     <joint name="base_to_livox" type="fixed">
         <parent link="TORSO"/>
         <child link="livox_frame"/>
-        <origin xyz="0 0 0.10" rpy="0 0 0"/>
+        <!-- ROS base convention: +x forward, +y left, +z upward. -->
+        <origin xyz="0.045 0 0.10" rpy="0 0 0"/>
     </joint>
 
     <!-- ================================================================== -->

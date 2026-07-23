@@ -1,5 +1,6 @@
-# Lite3 RTAB-Map parameters. The deployment intentionally omits the inaccurate
-# chassis odom provider, so MID-360 ICP owns odom -> base_link.
+# Lite3 RTAB-Map parameters. MID-360 ICP owns the private odom_icp trajectory;
+# the deployment bridge converts its corrected map pose to Nav2's chassis-owned
+# odom frame without creating a second odom -> base_link TF publisher.
 RGBD/CreateOccupancyGrid: true
 
 # Fuse the registered Orbbec depth image with the MID-360 cloud. Keep the

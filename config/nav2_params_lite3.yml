@@ -41,8 +41,12 @@ planner_server:
 controller_server:
   ros__parameters:
     use_sim_time: false
+    odom_topic: "__ROBONIX_ODOM_TOPIC__"
     tf_buffer_duration: 10.0
-    controller_frequency: 5.0
+    # A 5 Hz command loop lets the robot travel about 8 cm between decisions at
+    # 0.4 m/s.  Use a faster loop and a lower navigation speed while the
+    # projected MID-360 scan still has measurable pipeline latency.
+    controller_frequency: 10.0
     # min_x_velocity_threshold: 0.01
     # min_y_velocity_threshold: 0.01
     # min_theta_velocity_threshold: 0.01
@@ -55,7 +59,8 @@ controller_server:
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
       required_movement_radius: 0.1
-      movement_time_allowance: 30.0
+      # Recover promptly if the controller only steps in place at a doorway.
+      movement_time_allowance: 10.0
     # Goal checker parameters
     general_goal_checker:
       stateful: True
@@ -69,12 +74,15 @@ controller_server:
       debug_trajectory_details: True
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.5
+      # Doorways need enough time for the quadruped to settle and for the
+      # controller to react to a newly observed post. Keep navigation slower
+      # than open-loop manual motion while validating clearance.
+      max_vel_x: 0.35
       max_vel_y: 0.0
       max_vel_theta: 0.6
       # min_vel_theta: 0.05
       min_speed_xy: 0.0
-      max_speed_xy: 0.4
+      max_speed_xy: 0.35
       min_speed_theta: 0.05
       # Add high threshold velocity for turtlebot 3 issue.
       # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
@@ -86,8 +94,11 @@ controller_server:
       decel_lim_theta: -1.0
       vx_samples: 20
       vy_samples: 5
-      vtheta_samples: 120
-      sim_time: 3.0
+      # 20 x 120 trajectories over a 3 s horizon repeatedly missed the 10 Hz
+      # control deadline on Jetson during mapping. Forty angular samples still
+      # provide 0.03 rad/s resolution while cutting DWB work substantially.
+      vtheta_samples: 40
+      sim_time: 2.0
       linear_granularity: 0.05
       angular_granularity: 0.05
       transform_tolerance: 0.5
@@ -97,7 +108,10 @@ controller_server:
       short_circuit_trajectory_evaluation: True
       stateful: True
       critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.015
+      # Keep obstacle cost meaningful without making every trajectory through a
+      # narrow doorway too expensive. Global inflation already biases the plan
+      # toward the doorway center; this critic only refines the local trajectory.
+      BaseObstacle.scale: 0.02
       PathAlign.scale: 1.0
       # PathAlign.forward_point_distance: 0.1
       # PathAlign.forward_preference: true
@@ -113,10 +127,38 @@ controller_server:
       RotateToGoal.lookahead_time: 0.5
 
 
+# The navigation launch always inserts nav2_velocity_smoother between DWB and
+# the final /cmd_vel guard.  Keep a second, explicit limit here so no controller
+# or behavior can bypass the Lite3 navigation speed envelope accidentally.
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: false
+    smoothing_frequency: 20.0
+    scale_velocities: false
+    feedback: "OPEN_LOOP"
+    max_velocity: [0.35, 0.0, 0.60]
+    min_velocity: [-0.35, 0.0, -0.60]
+    max_accel: [0.50, 0.0, 1.0]
+    max_decel: [-0.50, 0.0, -1.0]
+    odom_topic: "__ROBONIX_ODOM_TOPIC__"
+    odom_duration: 0.1
+    deadband_velocity: [0.0, 0.0, 0.0]
+    # Fail to zero promptly if the controller stops publishing.  This is not a
+    # substitute for a geometric collision monitor, but prevents stale motion.
+    velocity_timeout: 0.5
+
+
 bt_navigator:
   ros__parameters:
     use_sim_time: false
+    odom_topic: "__ROBONIX_ODOM_TOPIC__"
     default_bt_xml_filename: "__ROBONIX_BT_XML__"
+    # The default 10 ms loop repeatedly exceeded its 100 Hz deadline in the
+    # navigation logs. 20 Hz is sufficient for BT coordination; the local
+    # controller continues running independently at 10 Hz.
+    bt_loop_duration: 50
+    # Allow Zenoh action/service handshakes up to one second under load.
+    default_server_timeout: 1000
     tf_buffer_duration: 10.0
 
 recoveries_server:
@@ -128,9 +170,9 @@ local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 10.0
-      # Updating stays fast for control, while RViz publication is throttled to
-      # keep visualization overhead low on Jetson.
-      publish_frequency: 2.0
+      # Match the legacy Lite3 deployment so RViz receives the rolling map
+      # continuously instead of relying on sparse full-map publications.
+      publish_frequency: 10.0
       global_frame: odom
       robot_base_frame: base_link
       use_sim_time: false
@@ -138,11 +180,11 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
-      # Lite3 Explorer physical size is 0.610 x 0.370 m. Four centimetres of
-      # costmap padding per side gives a 0.690 x 0.450 m navigation envelope
-      # without inflating the scan self-filter radius.
+      # Lite3 body envelope; padding supplies clearance for small pose/control errors.
+      # Effective envelope with padding: 0.71 m long x 0.47 m wide.
+      # Doorway centering is handled by inflation costs instead of an oversized body.
       footprint: "[ [0.305, 0.185], [0.305, -0.185], [-0.305, -0.185], [-0.305, 0.185] ]"
-      footprint_padding: 0.04
+      footprint_padding: 0.05
       # robot_radius: 0.32
 
       plugins: ["obstacle_layer", "inflation_layer"]
@@ -160,18 +202,20 @@ local_costmap:
           raytrace_max_range: 3.0
           tf_filter_tolerance: 1.0
           inf_is_valid: true
-          # ICP odometry and scan deskewing intentionally buffer the cloud until
-          # odom -> base_link exists. Keep an accepted obstacle through the
-          # resulting sub-second scan jitter instead of clearing it between scans.
-          observation_persistence: 1.00
-          expected_update_rate: 1.00
+          # Leave observation_persistence and expected_update_rate at the Nav2
+          # defaults, matching the legacy Lite3 deployment: use the latest scan
+          # without accumulating stale obstacle observations.
           marking: true
           clearing: true
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
+        # Keep a wider, slower-decaying preference field around door posts.
+        # This does not enlarge the lethal footprint, so a genuinely passable
+        # doorway remains available when no roomier trajectory exists.
         inflation_radius: 0.55
+        cost_scaling_factor: 2.5
 
 
 global_costmap:
@@ -182,7 +226,7 @@ global_costmap:
       robot_base_frame: base_link
       # robot_radius: 0.32
       footprint: "[ [0.305, 0.185], [0.305, -0.185], [-0.305, -0.185], [-0.305, 0.185] ]"
-      footprint_padding: 0.04
+      footprint_padding: 0.05
       update_frequency: 1.0      # 更新频率（Hz），比 local_costmap 低即可
       publish_frequency: 1.0     # 发布频率
       resolution: 0.05           # 分辨率，建议和地图一致
@@ -210,18 +254,17 @@ global_costmap:
           raytrace_max_range: 3.0
           tf_filter_tolerance: 1.0
           inf_is_valid: true
-          observation_persistence: 1.00
-          expected_update_rate: 1.00
+          # Match the legacy Lite3 observation-buffer defaults.
           marking: true
           clearing: true
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         enabled: true
-        # Match the local controller's clearance envelope. A 2 m global
-        # inflation radius can make nearly every corridor prohibitively costly.
-        inflation_radius: 0.60
-        cost_scaling_factor: 2.2
+        # Bias the global plan toward the center of doorways and corridors.
+        # This is intentionally below the old Lite3 value (2.0 m) for narrow rooms.
+        inflation_radius: 0.9
+        cost_scaling_factor: 2.5
 
 
 lifecycle_manager:
