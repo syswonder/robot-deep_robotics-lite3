@@ -3,10 +3,11 @@
 # odom frame without creating a second odom -> base_link TF publisher.
 RGBD/CreateOccupancyGrid: true
 
-# Fuse the registered Orbbec depth image with the MID-360 cloud. Keep the
-# exported occupancy map planar for Nav2 even though the input lidar is 3D.
-Grid/Sensor: 2
-Grid/FromDepth: true
+# Use only MID-360 to build the 2D occupancy grid. Orbbec RGB-D remains
+# available to RTAB-Map and scene perception, but does not write a second,
+# extrinsic-sensitive representation of the same walls into the Nav2 map.
+Grid/Sensor: 0
+Grid/FromDepth: false
 Grid/RangeMax: 6.0
 Grid/RangeMin: 0.25
 Grid/CellSize: 0.05
@@ -25,9 +26,8 @@ Grid/MaxGroundHeight: 0.1
 Grid/FootprintLength: 0.68
 Grid/FootprintWidth: 0.46
 
-# Visual registration is fragile in low-texture corridors and across Lite3's
-# in-place turns. Use MID-360 ICP for pose registration; RGB-D remains enabled
-# for occupancy generation. Force3DoF prevents gait roll/pitch bending the map.
+# Use MID-360 ICP for pose registration; RGB-D remains enabled for occupancy
+# generation. Force3DoF prevents gait roll/pitch from bending the map.
 Reg/Strategy: 1
 Reg/Force3DoF: true
 Optimizer/Strategy: 1
@@ -49,8 +49,6 @@ Vis/MaxDepth: 3.0
 # synchronization and ICP odometry.
 Rtabmap/DetectionRate: 1.0
 
-# Reject implausible frame-to-frame corrections instead of allowing a single
-# weak corridor match to rotate or translate the whole local trajectory.
 Icp/MaxCorrespondenceDistance: 0.2
 Icp/MaxTranslation: 0.5
 Icp/MaxRotation: 0.78
