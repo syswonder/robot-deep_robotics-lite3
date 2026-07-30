@@ -61,6 +61,10 @@ robot:
           description: "List current semantic scene objects."
         - path: robonix/system/scene/goal_near
           description: "Find a reachable navigation goal near a known object."
+    - provider_id: explore
+      capabilities:
+        - path: robonix/skill/explore/explore
+          description: "Run frontier-based autonomous exploration."
 
   components:
     - id: base
@@ -145,9 +149,10 @@ description:
     - "Build lidar and RGB-D maps with the mapping service and navigate with Nav2."
     - "Accept text and remote voice turns through robonix-client."
   cannot_do:
-    - "Manipulate objects; this deployment has no arm or gripper."
+    - "Pick up, grasp, hold, carry, fetch, deliver, move, or otherwise manipulate physical objects; this deployment has no arm, gripper, or manipulation capability."
     - "Use GNSS localization; navigation depends on the mapped area."
   notes:
+    - "For any request whose final outcome requires physical object manipulation, reject it immediately and explain that the robot has no arm or gripper. Do not search Scene for the object, inspect it, or navigate toward it, because those intermediate actions cannot make the requested outcome achievable."
     - "The URDF is the authoritative source for chassis and sensor frames."
     - "The MID-360 IMU is the canonical IMU provider; the Orbbec IMU remains disabled to avoid duplicate providers."
     - "Mapping uses service-map-rbnx with RTAB-Map, matching the Ranger Mini V3 integration."

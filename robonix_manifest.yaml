@@ -93,7 +93,7 @@ primitive:
     url: https://github.com/syswonder/primitive-livox-mid360-imu-rbnx
     branch: main
     config:
-      imu_topic: /livox/imu
+      imu_topic: /livox/imu 
       sentinel_timeout_s: 45.0
 
   # Publishes the Soma-owned Lite3 URDF as /robot_description and the standard
@@ -128,16 +128,14 @@ primitive:
 
 service:
   - name: mapping
-    # Upstream split-odometry mode keeps RTAB-Map/ICP localization independent
-    # while navigation receives low-latency chassis odometry.
+    # Use the upstream mapping service. MID-360 ICP owns the mapping trajectory;
+    # the chassis odometry remains dedicated to Nav2.
     url: https://github.com/syswonder/service-map-rbnx
     branch: main
     manifest: package_manifest.jetson-native.yaml
     config:
       algo: rtabmap
       base_frame: base_link
-      # ICP owns this private frame only as an Odometry message; it does not
-      # broadcast odom_icp -> base_link, so it cannot conflict with chassis TF.
       odom_frame: odom_icp
       use_sim_time: false
       map_id: 3f_full_lite3
@@ -148,12 +146,7 @@ service:
       navigation_odom_bridge: true
       navigation_odom_topic: /odom
       navigation_odom_frame: odom
-      # Mapping is no longer in Nav2's real-time obstacle path. Deskew the
-      # MID-360 input inside ICP for the best rotational odometry quality;
-      # navigation's independent /scanner/scan projection remains un-deskewed.
       deskew_lidar: true
-      # Occupancy fusion is selected in config/rtabmap_params.yaml through
-      # Grid/Sensor and Grid/FromDepth. Do not also set occupancy_sources here.
       params_file: config/rtabmap_params.yaml
       sensor_providers:
         lidar3d: mid360_lidar
@@ -215,4 +208,8 @@ service:
         odom: lite3_quadruped
         scan_cloud: mid360_lidar
 
-skill: []
+skill:
+  - name: explore
+    url: https://github.com/syswonder/skill-explore-rbnx
+    branch: main
+    config: {}

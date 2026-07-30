@@ -71,6 +71,7 @@ uses port `60002` and should only be reachable over a trusted LAN or Tailscale.
 - PointCloud2-to-LaserScan conversion
 - Mapping service with the RTAB-Map backend
 - Nav2 navigation
+- Frontier-based autonomous exploration
 
 Soma loads `soma.yaml` and the deployment-local `urdf/Lite3.urdf`. Sensor
 mount transforms in that URDF should be updated after physical calibration.
