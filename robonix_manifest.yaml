@@ -121,7 +121,8 @@ primitive:
   # robonix-client discovers this provider through Atlas and connects from
   # the client to the robot. No client IP is stored in this deployment.
   - name: audio_client_bridge
-    path: ${ROBONIX_SOURCE_PATH}/examples/webots/primitives/audio_client_bridge
+    url: https://github.com/syswonder/primitive-audio-client-bridge-rbnx
+    branch: main
     config:
       transport: reverse
       listen_port: 60002
