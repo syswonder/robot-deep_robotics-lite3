@@ -188,6 +188,13 @@ service:
       bt_xml_file: config/navigate.xml
       use_sim_time: false
       action_wait_s: 90.0
+      dynamic_speed:
+        # Match the effective DWB and velocity-smoother planar ceiling.
+        # The 75% startup limit is 0.2625 m/s.
+        max_linear_speed_mps: 0.35
+        default_percentage: 75
+        step_percentage: 20
+        min_percentage: 20
       # Project the MID-360 cloud in base_link, remove returns inside the Soma
       # footprint, reject isolated scan speckles, and publish the canonical
       # /scanner/scan consumed by both Nav2 costmaps and the velocity guard.
