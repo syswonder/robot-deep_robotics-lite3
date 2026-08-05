@@ -214,3 +214,10 @@ skill:
     url: https://github.com/syswonder/skill-explore-rbnx
     branch: main
     config: {}
+
+  - name: find_object
+    url: https://github.com/Bunnycxk/skill-find-object-rbnx.git
+    branch: main
+    config:
+      step_deg: 45.0
+      settle_s: 0.6
