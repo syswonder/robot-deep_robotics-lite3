@@ -226,7 +226,7 @@ skill:
     config: {}
 
   - name: find_object
-    url: https://github.com/Bunnycxk/skill-find-object-rbnx.git
+    url: https://github.com/syswonder/skill-find-object-rbnx
     branch: main
     config:
       step_deg: 45.0
