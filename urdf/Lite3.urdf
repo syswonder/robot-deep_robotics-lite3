@@ -4,7 +4,7 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot name="Lite3">
     <mujoco>
-        <compiler meshdir="../meshes/" balanceinertia="false" discardvisual="false" fusestatic="false"/>
+        <compiler meshdir="meshes/" balanceinertia="false" discardvisual="false" fusestatic="false"/>
     </mujoco>
 
     <!-- base_link: 机体质心根坐标系（ROS 标准约定） -->
@@ -25,7 +25,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/torso.STL"/>
+                <mesh filename="meshes/torso.STL"/>
             </geometry>
         </visual>
         <collision>
@@ -194,7 +194,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/hip.STL" scale="1 1 1"/>
+                <mesh filename="meshes/hip.STL" scale="1 1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -219,7 +219,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/thigh.STL"/>
+                <mesh filename="meshes/thigh.STL"/>
             </geometry>
         </visual>
         <collision>
@@ -244,7 +244,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/shank.STL"/>
+                <mesh filename="meshes/shank.STL"/>
             </geometry>
             <material name="">
                 <color rgba="1 1 1 1"/>
@@ -299,7 +299,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/hip.STL" scale="1 -1 1"/>
+                <mesh filename="meshes/hip.STL" scale="1 -1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -325,7 +325,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/thigh.STL" scale="1 -1 1"/>
+                <mesh filename="meshes/thigh.STL" scale="1 -1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -350,7 +350,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/shank.STL"/>
+                <mesh filename="meshes/shank.STL"/>
             </geometry>
         </visual>
         <collision>
@@ -402,7 +402,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/hip.STL" scale="-1 1 1"/>
+                <mesh filename="meshes/hip.STL" scale="-1 1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -427,7 +427,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/thigh.STL"/>
+                <mesh filename="meshes/thigh.STL"/>
             </geometry>
         </visual>
         <collision>
@@ -452,7 +452,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/shank.STL"/>
+                <mesh filename="meshes/shank.STL"/>
             </geometry>
         </visual>
         <collision>
@@ -504,7 +504,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/hip.STL" scale="-1 -1 1"/>
+                <mesh filename="meshes/hip.STL" scale="-1 -1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -529,7 +529,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/thigh.STL" scale="1 -1 1"/>
+                <mesh filename="meshes/thigh.STL" scale="1 -1 1"/>
             </geometry>
         </visual>
         <collision>
@@ -554,7 +554,7 @@
         </inertial>
         <visual>
             <geometry>
-                <mesh filename="../meshes/shank.STL"/>
+                <mesh filename="meshes/shank.STL"/>
             </geometry>
         </visual>
         <collision>
