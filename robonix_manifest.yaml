@@ -233,3 +233,7 @@ skill:
     config:
       step_deg: 45.0
       settle_s: 0.6
+      # Image saving is off by default. To enable it, uncomment both settings
+      # and choose a writable output directory on the robot host.
+      # save_images: true
+      # image_output_dir: /data/robonix/find-object/scans
