@@ -191,11 +191,11 @@ local_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
-        # MID-360 supplies the full-surround scan; the front RGB-D camera fills
-        # its near-field blind area for low obstacles. Keep the depth cloud out
-        # of the global costmap and RTAB-Map occupancy-grid generation so it
-        # cannot create persistent duplicate walls.
-        observation_sources: scan depth_cloud
+        # MID-360 supplies the full-surround scan. The front RGB-D source is
+        # configured below but currently excluded from active observations.
+        # Temporarily disable the Orbbec depth cloud while diagnosing startup
+        # in-place stepping and intermittent USB camera disconnects.
+        observation_sources: scan
         scan:
           topic: /scanner/scan
           data_type: "LaserScan"

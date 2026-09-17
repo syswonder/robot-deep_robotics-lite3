@@ -117,9 +117,9 @@ primitive:
       depth_registration: true
       enable_color: true
       enable_depth: true
-      # Nav2's local costmap consumes the registered depth cloud as a
-      # near-field obstacle source. RTAB-Map still ignores depth when creating
-      # its occupancy grid (see Grid/FromDepth in rtabmap_params.yaml).
+      # Keep the registered depth cloud available for optional near-field Nav2
+      # obstacle observations. The current local costmap temporarily uses scan
+      # only; RTAB-Map's occupancy grid also excludes depth (Grid/FromDepth).
       enable_point_cloud: true
       enable_imu: false
       sentinel_timeout_s: 45.0
