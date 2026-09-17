@@ -26,6 +26,7 @@ env:
   MAPPING_WEBUI_PORT: "8091"
   ROBONIX_NAV2_FORCE: native
   ROBONIX_NAV2_PLATFORM: jetson_orin
+  # Keep this equal to mapping.config.map_id when booting localization mode.
   SCENE_MAP_ID: 3f_full_lite3
   SCENE_RESTORE_ON_START: "true"
   MAPPING_MAPS_DIR: ${HOME}/.robonix/maps
@@ -133,6 +134,37 @@ primitive:
       listen_port: 60002
 
 service:
+  # Only for the optional slam_toolbox profile below: it needs a scan before
+  # Nav2 starts. When enabling this service, also disable Nav2 scan_projection
+  # and use topic_remap.scan: /scanner/scan to avoid two scan publishers.
+  # - name: pcld2lscan
+  #   url: https://github.com/syswonder/service-pcld2lscan-rbnx
+  #   branch: main
+  #   config:
+  #     scan_frame: base_link
+  #     scan_rate_hz: 6.0
+  #     queue_size: 1
+  #     max_scan_age_s: 0.5
+  #     transform_tolerance_s: 0.05
+  #     min_height_m: 0.05
+  #     max_height_m: 1.0
+  #     range_min_m: 0.03
+  #     range_max_m: 20.0
+  #     angle_increment_rad: 0.0087
+  #     self_filter_mode: circle
+  #     self_filter_footprint:
+  #       - [0.305, 0.185]
+  #       - [0.305, -0.185]
+  #       - [-0.305, -0.185]
+  #       - [-0.305, 0.185]
+  #     self_filter_margin_m: 0.0
+  #     speckle_filter_enabled: true
+  #     speckle_window_bins: 2
+  #     speckle_max_range_delta_m: 0.20
+  #     speckle_min_neighbors: 2
+  #     deskewing: false
+  #     scan_timeout_s: 45.0
+
   - name: mapping
     # Use the upstream mapping service. MID-360 ICP owns the mapping trajectory;
     # the chassis odometry remains dedicated to Nav2.
@@ -159,6 +191,33 @@ service:
         imu: mid360_imu
         rgb: orbbec_camera
         depth: orbbec_camera
+
+  # Optional slam_toolbox + Beluga profile. To activate, disable the RTAB-Map
+  # mapping block, enable this block and pcld2lscan above, and match SCENE_MAP_ID
+  # to map_id. Disable Nav2 scan_projection, remove provider_ids.scan_cloud,
+  # and remap scan to /scanner/scan.
+  # Never enable both mapping services or both scan publishers.
+  # - name: mapping
+  #   url: https://github.com/syswonder/service-map-rbnx
+  #   branch: feat/map-localizer
+  #   manifest: package_manifest.jetson-native.yaml
+  #   config:
+  #     algo: slam_toolbox
+  #     localizer: beluga
+  #     localizer_particles: {min: 500, max: 2000}
+  #     base_frame: base_link
+  #     odom_frame: odom
+  #     use_sim_time: false
+  #     map_mode: localization
+  #     map_id: lab_slam_3f
+  #     slam_toolbox_params:
+  #       min_travel_m: 0.10
+  #       min_heading_rad: 0.10
+  #       scan_buffer: 30
+  #       loop_search_m: 2.5
+  #     sensor_providers:
+  #       scan_converter: pcld2lscan
+  #       lidar3d: mid360_lidar
 
   - name: speech
     path: ${ROBONIX_SOURCE_PATH}/services/speech
