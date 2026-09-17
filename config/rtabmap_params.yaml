@@ -52,3 +52,7 @@ Rtabmap/DetectionRate: 1.0
 Icp/MaxCorrespondenceDistance: 0.2
 Icp/MaxTranslation: 0.5
 Icp/MaxRotation: 0.78
+
+# Seed each scan-to-scan ICP update with the chassis odometry increment. ICP
+# still publishes the independent odom_icp trajectory used by RTAB-Map.
+guess_frame_id: odom
