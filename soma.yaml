@@ -54,7 +54,7 @@ robot:
         - path: robonix/service/speech/asr
           description: "Recognize speech received from the selected client microphone."
         - path: robonix/service/speech/speak
-          description: "Synthesize speech and play it through the selected client speaker."
+          description: "Synthesize speech and play it through the robot speaker, or a selected client speaker."
     - provider_id: scene
       capabilities:
         - path: robonix/system/scene/list_objects
@@ -148,6 +148,16 @@ robot:
                     - path: robonix/primitive/audio/speaker
                       description: "Send synthesized audio to robonix-client."
               components: []
+            - id: robot_audio
+              type: audio_io
+              exports:
+                - provider_id: audio_driver
+                  capabilities:
+                    - path: robonix/primitive/audio/mic
+                      description: "Capture microphone audio on the robot host."
+                    - path: robonix/primitive/audio/speaker
+                      description: "Play synthesized audio on the robot speaker."
+              components: []
 
 description:
   summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
@@ -165,4 +175,5 @@ description:
     - "The URDF is the authoritative source for chassis and sensor frames."
     - "The MID-360 IMU is the canonical IMU provider; the Orbbec IMU remains disabled to avoid duplicate providers."
     - "Mapping uses service-map-rbnx with RTAB-Map, matching the Ranger Mini V3 integration."
+    - "Robot audio (USB speaker/mic on the Orin) is provided by audio_driver; speech plays through it by default."
     - "Remote audio uses audio_client_bridge on TCP port 60002; expose it only on a trusted network."

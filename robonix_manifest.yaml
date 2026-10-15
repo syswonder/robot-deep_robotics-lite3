@@ -129,6 +129,17 @@ primitive:
       enable_imu: false
       sentinel_timeout_s: 45.0
 
+  # Robot-local ALSA audio on the Orin (USB speaker/mic). The card offers only
+  # 44.1/48 kHz stereo natively, so plughw resamples the 16 kHz mono TTS
+  # stream, and the card name keeps the mapping stable across USB renumbering.
+  - name: audio_driver
+    url: https://github.com/syswonder/primitive-audio-driver-rbnx
+    branch: main
+    config:
+      speaker_device: "plughw:Device,0"
+      speaker_sample_rate: 16000
+      mic_device: "plughw:Device,0"
+
   # robonix-client discovers this provider through Atlas and connects from
   # the client to the robot. No client IP is stored in this deployment.
   - name: audio_client_bridge
@@ -229,7 +240,7 @@ service:
     config:
       speech_backend: tencent
       disable_whisper: true
-      default_speaker_provider_id: audio_client_bridge
+      default_speaker_provider_id: audio_driver
       wake_words: ["罗伯特"]
       tencent_asr_appid: ${TENCENT_ASR_APPID}
       tencent_asr_engine: 16k_zh
