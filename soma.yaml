@@ -54,7 +54,7 @@ robot:
         - path: robonix/service/speech/asr
           description: "Recognize speech received from the selected client microphone."
         - path: robonix/service/speech/speak
-          description: "Synthesize speech and play it through the selected client speaker."
+          description: "Synthesize speech and play it through the robot speaker, or a selected client speaker."
     - provider_id: scene
       capabilities:
         - path: robonix/system/scene/list_objects
@@ -83,7 +83,15 @@ robot:
               description: "Lite3 chassis odometry and runtime motion state."
             - path: robonix/primitive/chassis/posture
               description: "Lite3 stand and sit posture control."
+            - path: robonix/primitive/health/state
+              description: "Chassis telemetry (battery, gait/motion state, fault code) as a Robonix health frame."
+            - path: robonix/primitive/health/stream
+              description: "Stream chassis telemetry into Soma's health collector."
       components:
+        - id: battery
+          type: battery
+          urdf_link: base_link
+          exports: []
         - id: torso
           type: body_part
           urdf_link: TORSO
@@ -140,11 +148,22 @@ robot:
                     - path: robonix/primitive/audio/speaker
                       description: "Send synthesized audio to robonix-client."
               components: []
+            - id: robot_audio
+              type: audio_io
+              exports:
+                - provider_id: audio_driver
+                  capabilities:
+                    - path: robonix/primitive/audio/mic
+                      description: "Capture microphone audio on the robot host."
+                    - path: robonix/primitive/audio/speaker
+                      description: "Play synthesized audio on the robot speaker."
+              components: []
 
 description:
   summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
   can_do:
     - "Stand, sit, and publish chassis odometry; translational and rotational motion is performed only through collision-checked Nav2 navigation."
+    - "Report chassis health (battery level, charging, gait/motion state, motion-host fault code) through Soma and Vitals."
     - "Publish 3D lidar, 6-axis IMU, and RGB-D observations."
     - "Build lidar and RGB-D maps with the mapping service and navigate with Nav2."
     - "Accept text and remote voice turns through robonix-client."
@@ -156,4 +175,5 @@ description:
     - "The URDF is the authoritative source for chassis and sensor frames."
     - "The MID-360 IMU is the canonical IMU provider; the Orbbec IMU remains disabled to avoid duplicate providers."
     - "Mapping uses service-map-rbnx with RTAB-Map, matching the Ranger Mini V3 integration."
+    - "Robot audio (USB speaker/mic on the Orin) is provided by audio_driver; speech plays through it by default."
     - "Remote audio uses audio_client_bridge on TCP port 60002; expose it only on a trusted network."
