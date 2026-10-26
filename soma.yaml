@@ -83,7 +83,15 @@ robot:
               description: "Lite3 chassis odometry and runtime motion state."
             - path: robonix/primitive/chassis/posture
               description: "Lite3 stand and sit posture control."
+            - path: robonix/primitive/health/state
+              description: "Chassis telemetry (battery, gait/motion state, fault code) as a Robonix health frame."
+            - path: robonix/primitive/health/stream
+              description: "Stream chassis telemetry into Soma's health collector."
       components:
+        - id: battery
+          type: battery
+          urdf_link: base_link
+          exports: []
         - id: torso
           type: body_part
           urdf_link: TORSO
@@ -145,6 +153,7 @@ description:
   summary: "Lite3 quadruped with a MID-360 lidar and Orbbec RGB-D camera."
   can_do:
     - "Stand, sit, and publish chassis odometry; translational and rotational motion is performed only through collision-checked Nav2 navigation."
+    - "Report chassis health (battery level, charging, gait/motion state, motion-host fault code) through Soma and Vitals."
     - "Publish 3D lidar, 6-axis IMU, and RGB-D observations."
     - "Build lidar and RGB-D maps with the mapping service and navigate with Nav2."
     - "Accept text and remote voice turns through robonix-client."

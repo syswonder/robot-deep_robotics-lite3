@@ -55,6 +55,11 @@ system:
     provider_id: soma
     robot_yaml: ${ROBONIX_DEPLOY_DIR}/soma.yaml
     log: info
+  # Aggregates Soma health snapshots (chassis telemetry from lite3_quadruped)
+  # into robonix/system/vitals/*: per-module health for robonix-client.
+  vitals:
+    listen: 127.0.0.1:50092
+    log: info
   scene:
     log: info
     # camera_provider_id: no_camera
