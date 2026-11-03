@@ -49,6 +49,23 @@ All ROS components use domain 42, Fast DDS over UDP, and `/clock`. The bridge pu
 cloud, RGB-D, and camera calibration. Nav2 returns commands through `/cmd_vel`
 to the same simulated chassis primitive used by Robonix.
 
+Physics uses a 1 ms timestep and absolute wall-clock deadlines, targeting
+RTF 1.0 (`elapsed /clock time / elapsed monotonic wall time`). Short sensor or
+rendering stalls are recovered over subsequent physics steps. Each catch-up
+step still polls ROS, reads the latest motor command, sends controller state,
+and yields to the external RL controller. Backlog is capped at 50 ms so a long
+process suspension cannot trigger an unbounded burst of stale control steps.
+Pause does not accumulate a physics backlog. Sustained CPU overload or stalls
+longer than the catch-up cap can still reduce RTF.
+
+Camera and point-cloud messages use typed byte arrays so ROS does not validate
+each payload byte in Python while holding the GIL. This keeps sensor encoding
+from blocking the physics loop without reducing sensor resolution or rates.
+The pinned controller patch also drains queued UDP state packets on each
+receive tick and uses the newest valid state. Reading only one packet per
+tick at a nominal 1 kHz creates growing feedback latency after scheduling
+jitter. Rebuild with `./build.sh --mode simulation` when that patch changes.
+
 ## Browser access
 
 From Windows:
@@ -120,6 +137,13 @@ Run the sensor-specific acceptance check with:
 ```bash
 ./sim/manage.sh sensor-acceptance
 ```
+
+This warms up for 7 seconds, then measures 30 seconds of `/clock` against a
+monotonic wall clock. Both the overall RTF and each 10-second window must be
+at least 0.85. There is no fixed upper RTF limit, allowing future accelerated
+simulation modes to pass this check. Sensor contracts, stationary drift,
+standing height, and tilt are checked as well. Run this check with the robot
+standing and no active navigation goal.
 
 Lower-level bridge validation is available as:
 

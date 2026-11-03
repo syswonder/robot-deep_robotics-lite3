@@ -13,6 +13,7 @@ import struct
 import sys
 import threading
 import time
+from array import array
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -60,6 +61,9 @@ else:
         WEB3D_ROOT, ENVIRONMENT, spawn_override, yaw_override
     )
 DT = 0.001
+# Retain ordinary scheduling jitter, but do not replay an unbounded backlog
+# after a suspended process or a long stall with an external RL controller.
+MAX_CATCHUP_S = 0.05
 LIDAR_RATE_HZ = 10.0
 LIDAR_RAYS = 360
 LIDAR_RANGE_MIN = 0.10
@@ -386,7 +390,9 @@ class Lite3Bridge(Node):
         color.encoding = "rgb8"
         color.is_bigendian = False
         color.step = CAMERA_WIDTH * 3
-        color.data = rgb.tobytes()
+        # ROS validates bytes element by element in Python. A typed array
+        # takes its fast path and avoids holding the GIL across an image.
+        color.data = array("B", rgb.tobytes())
         self.color_pub.publish(color)
 
         depth_message = ImageMessage()
@@ -396,7 +402,7 @@ class Lite3Bridge(Node):
         depth_message.encoding = "32FC1"
         depth_message.is_bigendian = False
         depth_message.step = CAMERA_WIDTH * 4
-        depth_message.data = depth.tobytes()
+        depth_message.data = array("B", depth.tobytes())
         self.depth_pub.publish(depth_message)
         self.color_info_pub.publish(self._camera_info(stamp, color.header.frame_id))
         self.depth_info_pub.publish(self._camera_info(stamp, depth_message.header.frame_id))
@@ -453,7 +459,7 @@ class Lite3Bridge(Node):
         cloud.is_bigendian = False
         cloud.point_step = 12
         cloud.row_step = cloud.point_step * cloud.width
-        cloud.data = np.asarray(points, dtype=np.float32).tobytes()
+        cloud.data = array("B", np.asarray(points, dtype=np.float32).tobytes())
         cloud.is_dense = True
         self.cloud_pub.publish(cloud)
 
@@ -665,10 +671,13 @@ class Lite3Bridge(Node):
             if remaining > 0:
                 time.sleep(remaining)
             else:
-                # Drop sensor/rendering lag instead of advancing multiple physics
-                # steps with a stale external RL command. This matches the vendor
-                # simulator real-time scheduler and preserves gait stability.
-                next_step = time.perf_counter()
+                # Keep the absolute deadline so sensor/rendering jitter is
+                # recovered on subsequent steps instead of slowing /clock.
+                # Every step still polls ROS, samples the latest motor command,
+                # and sends fresh state to the external controller. Yield to
+                # that controller between catch-up steps and cap severe lag.
+                next_step = max(next_step, time.perf_counter() - MAX_CATCHUP_S)
+                time.sleep(0)
 
     def destroy_node(self) -> bool:
         self.running = False

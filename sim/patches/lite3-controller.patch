@@ -1,9 +1,9 @@
 diff --git a/interface/robot/simulation/simulation_interface.hpp b/interface/robot/simulation/simulation_interface.hpp
-index 067a9a7..3037498 100644
+index 067a9a7..b527735 100644
 --- a/interface/robot/simulation/simulation_interface.hpp
 +++ b/interface/robot/simulation/simulation_interface.hpp
 @@ -130,7 +130,10 @@ namespace interface{
-
+ 
              // 接收数据
              char buffer[1024]={0};
 -            float data[47]={0};
@@ -13,42 +13,51 @@ index 067a9a7..3037498 100644
 +            constexpr size_t v1_packet_size = v1_header_size + state_float_count*sizeof(float);
              struct sockaddr_in clientAddr;
              socklen_t clientAddrLen = sizeof(clientAddr);
-
-@@ -150,14 +153,28 @@ namespace interface{
+ 
+@@ -150,14 +153,37 @@ namespace interface{
                      return;
                  }
-
+ 
 -                std::memcpy(data, buffer, 46*sizeof(float));
 -                run_time_ = ((double*)(data))[0];
--                rpy_ = Eigen::Map<Vec3f>(data+2, 3);
--                acc_ = Eigen::Map<Vec3f>(data+5, 3);
--                omega_body_ = Eigen::Map<Vec3f>(data+8, 3);
--                joint_pos_ = Eigen::Map<VecXf>(data+11, 12);
--                joint_vel_ = Eigen::Map<VecXf>(data+23, 12);
--                joint_tau_ = Eigen::Map<VecXf>(data+35, 12);
-+                size_t payload_offset = 0;
-+                if(static_cast<size_t>(recvLen) == v1_packet_size &&
-+                   std::memcmp(buffer, "L3ST", 4) == 0){
-+                    uint16_t version = 0;
-+                    std::memcpy(&version, buffer+4, sizeof(version));
-+                    if(version != 1) continue;
-+                    payload_offset = 12;
-+                }else if(static_cast<size_t>(recvLen) != legacy_packet_size){
-+                    continue;
-+                }
-+
+-                rpy_ = Eigen::Map<Vec3f>(data+2, 3); 
+-                acc_ = Eigen::Map<Vec3f>(data+5, 3); 
+-                omega_body_ = Eigen::Map<Vec3f>(data+8, 3); 
+-                joint_pos_ = Eigen::Map<VecXf>(data+11, 12); 
+-                joint_vel_ = Eigen::Map<VecXf>(data+23, 12); 
+-                joint_tau_ = Eigen::Map<VecXf>(data+35, 12); 
 +                double timestamp = 0.0;
 +                float state[state_float_count]{};
-+                std::memcpy(&timestamp, buffer+payload_offset, sizeof(timestamp));
-+                std::memcpy(state, buffer+payload_offset+sizeof(timestamp), sizeof(state));
-+                run_time_ = timestamp;
++                bool have_state = false;
++                // A 1 kHz sender and timer-driven receiver inevitably jitter.
++                // Drain queued packets and expose only the newest valid state,
++                // otherwise the controller accumulates permanent feedback lag.
++                do {
++                    size_t payload_offset = 0;
++                    if(static_cast<size_t>(recvLen) == v1_packet_size &&
++                       std::memcmp(buffer, "L3ST", 4) == 0){
++                        uint16_t version = 0;
++                        std::memcpy(&version, buffer+4, sizeof(version));
++                        if(version != 1) continue;
++                        payload_offset = 12;
++                    }else if(static_cast<size_t>(recvLen) != legacy_packet_size){
++                        continue;
++                    }
++                    std::memcpy(&timestamp, buffer+payload_offset, sizeof(timestamp));
++                    std::memcpy(state, buffer+payload_offset+sizeof(timestamp), sizeof(state));
++                    have_state = true;
++                } while((recvLen = recvfrom(sockfd, buffer, sizeof(buffer), MSG_DONTWAIT,
++                            (struct sockaddr*)&clientAddr, &clientAddrLen)) >= 0);
++                if(!have_state) continue;
++
 +                rpy_ = Eigen::Map<Vec3f>(state, 3);
 +                acc_ = Eigen::Map<Vec3f>(state+3, 3);
 +                omega_body_ = Eigen::Map<Vec3f>(state+6, 3);
 +                joint_pos_ = Eigen::Map<VecXf>(state+9, 12);
 +                joint_vel_ = Eigen::Map<VecXf>(state+21, 12);
 +                joint_tau_ = Eigen::Map<VecXf>(state+33, 12);
-
++                run_time_ = timestamp;
+ 
                  // 打印接收到的数据
                  // std::cout << "Received data: " << run_time_ << std::endl;
 diff --git a/state_machine/state_machine.hpp b/state_machine/state_machine.hpp

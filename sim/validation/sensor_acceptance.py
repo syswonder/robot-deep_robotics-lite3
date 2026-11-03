@@ -40,6 +40,7 @@ class SensorAcceptance(Node):
         self.clock_values: list[tuple[float, float]] = []
         self.odom_positions: list[tuple[float, np.ndarray]] = []
         self.gyro_norms: list[tuple[float, float]] = []
+        self.base_tilts: list[tuple[float, float]] = []
         self.static_children: set[str] = set()
         for topic, message_type in TOPICS.items():
             self.create_subscription(
@@ -65,6 +66,9 @@ class SensorAcceptance(Node):
         elif topic == "/imu/data":
             w = message.angular_velocity
             self.gyro_norms.append((now, math.sqrt(w.x * w.x + w.y * w.y + w.z * w.z)))
+            q = message.orientation
+            tilt = math.acos(float(np.clip(1.0 - 2.0 * (q.x*q.x + q.y*q.y), -1.0, 1.0)))
+            self.base_tilts.append((now, tilt))
 
     def _receive_static(self, message: TFMessage) -> None:
         self.static_children.update(item.child_frame_id for item in message.transforms)
@@ -89,7 +93,7 @@ def main() -> int:
     while rclpy.ok() and time.monotonic() < warmup_end:
         rclpy.spin_once(node, timeout_sec=0.1)
     sample_start = time.monotonic()
-    sample_end = sample_start + 6.0
+    sample_end = sample_start + 30.0
     while rclpy.ok() and time.monotonic() < sample_end:
         rclpy.spin_once(node, timeout_sec=0.1)
 
@@ -163,28 +167,51 @@ def main() -> int:
     require(not missing_static, f"missing static TF frames: {sorted(missing_static)}", failures)
 
     clocks = [(wall, sim) for wall, sim in node.clock_values if wall >= sample_start]
+    window_rtfs: list[float] = []
     if len(clocks) >= 2:
         rtf = (clocks[-1][1] - clocks[0][1]) / (clocks[-1][0] - clocks[0][0])
     else:
         rtf = 0.0
-    require(rtf >= 0.65, f"real-time factor {rtf:.2f} < 0.65", failures)
+    require(rtf >= 0.85,
+            f"real-time factor {rtf:.3f} < 0.85", failures)
+    if len(clocks) >= 2:
+        for offset in (0.0, 10.0, 20.0):
+            window = [(wall, sim) for wall, sim in clocks
+                      if sample_start + offset <= wall < sample_start + offset + 10.0]
+            if len(window) < 2:
+                require(False, f"insufficient /clock samples in RTF window {offset:.0f}s", failures)
+                continue
+            window_rtf = ((window[-1][1] - window[0][1]) /
+                          (window[-1][0] - window[0][0]))
+            window_rtfs.append(window_rtf)
+            require(window_rtf >= 0.85,
+                    f"RTF window {offset:.0f}s: {window_rtf:.3f} < 0.85", failures)
 
     recent_odom = [position for wall, position in node.odom_positions if wall >= sample_start + 3.0]
     recent_gyro = [value for wall, value in node.gyro_norms if wall >= sample_start + 3.0]
+    recent_tilts = [value for wall, value in node.base_tilts if wall >= sample_start + 3.0]
     if recent_odom:
         drift = float(np.linalg.norm(np.max(recent_odom, axis=0) - np.min(recent_odom, axis=0)))
+        min_height = float(np.min(np.asarray(recent_odom)[:, 2]))
     else:
         drift = math.inf
+        min_height = -math.inf
     gyro_p95 = float(np.percentile(recent_gyro, 95)) if recent_gyro else math.inf
+    max_tilt = float(np.max(recent_tilts)) if recent_tilts else math.inf
     require(drift < 0.08, f"stationary odom drift {drift:.3f} m >= 0.08 m", failures)
     require(gyro_p95 < 0.50, f"stationary gyro p95 {gyro_p95:.3f} rad/s >= 0.50", failures)
+    require(min_height >= 0.25, f"standing base height {min_height:.3f} m < 0.25 m", failures)
+    require(max_tilt < 0.35, f"standing base tilt {max_tilt:.3f} rad >= 0.35 rad", failures)
 
     print("Simulated sensor acceptance")
     for topic in TOPICS:
         print(f"  {topic:34s} {measured_rates[topic]:6.1f} Hz")
-    print(f"  real-time factor                    {rtf:6.2f}")
+    print(f"  real-time factor (30s sample)        {rtf:7.4f}")
+    print(f"  real-time factor (10s windows)       {', '.join(f'{value:.4f}' for value in window_rtfs)}")
     print(f"  stationary odom span                {drift:6.3f} m")
     print(f"  stationary gyro p95                 {gyro_p95:6.3f} rad/s")
+    print(f"  standing minimum height             {min_height:6.3f} m")
+    print(f"  standing maximum tilt               {max_tilt:6.3f} rad")
     if failures:
         for failure in failures:
             print(f"FAIL: {failure}", file=sys.stderr)
