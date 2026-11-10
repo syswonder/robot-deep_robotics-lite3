@@ -121,6 +121,23 @@ case "${1:-}" in
       python3 /workspace/lite3-validation/sensor_acceptance.py
     '
     ;;
+  yaw-acceptance)
+    [[ "$(docker inspect -f '{{.State.Running}}' "$SIM_CONTAINER" 2>/dev/null || true)" == "true" ]] || {
+      echo "Lite3 simulation is not running" >&2
+      exit 1
+    }
+    shift
+    for argument in "$@"; do
+      if [[ "$argument" == "--reset-between" && -f "$DEPLOY_DIR/rbnx-boot/mode" ]]; then
+        echo "--reset-between requires the standalone simulator; stop the full stack first" >&2
+        exit 1
+      fi
+    done
+    docker exec "$SIM_CONTAINER" bash -lc '
+      source /opt/ros/humble/setup.bash
+      exec python3 /workspace/lite3-validation/yaw_acceptance.py "$@"
+    ' yaw-acceptance "$@"
+    ;;
   navigation-acceptance)
     [[ "$(docker inspect -f '{{.State.Running}}' "$SIM_CONTAINER" 2>/dev/null || true)" == "true" ]] || {
       echo "Lite3 simulation is not running" >&2
@@ -203,7 +220,7 @@ case "${1:-}" in
     docker ps --filter "name=^/${SIM_CONTAINER}$" --format '{{.Names}} {{.Status}}'
     ;;
   *)
-    echo "usage: $0 {build|web3d-install|bridge-smoke|sensor-acceptance|navigation-acceptance|up|down|status}" >&2
+    echo "usage: $0 {build|web3d-install|bridge-smoke|sensor-acceptance|yaw-acceptance|navigation-acceptance|up|down|status}" >&2
     exit 2
     ;;
 esac

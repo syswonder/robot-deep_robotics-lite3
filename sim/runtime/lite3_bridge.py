@@ -31,6 +31,7 @@ from sensor_msgs.msg import CameraInfo, Image as ImageMessage, Imu, JointState
 from sensor_msgs.msg import LaserScan, PointCloud2, PointField
 from std_srvs.srv import Trigger
 from tf2_ros import StaticTransformBroadcaster, TransformBroadcaster
+from yaw_velocity_controller import YawVelocityController
 
 
 JOINT_NAMES = [
@@ -189,6 +190,10 @@ class Lite3Bridge(Node):
             CameraInfo, "/camera/depth/camera_info", qos_profile_sensor_data)
         self.command_pub = self.create_publisher(
             Twist, "/lite3_sim/commanded_velocity", 10)
+        self.policy_command_pub = self.create_publisher(
+            Twist, "/lite3_sim/policy_velocity", 10)
+        self.yaw_controller = YawVelocityController(float(self.policy_velocity[2]))
+        self.last_yaw_control_time = 0.0
         self.tf = TransformBroadcaster(self)
         self.static_tf = StaticTransformBroadcaster(self)
         # Nav2 and the Robonix chassis primitive publish reliable commands.
@@ -264,6 +269,14 @@ class Lite3Bridge(Node):
                                 RL_CONTROL: "rl_control",
                             }.get(bridge.target_mode, str(bridge.target_mode)),
                             "command": bridge.latest_cmd.tolist(),
+                            "yawTracking": {
+                                "target": bridge.yaw_controller.previous_target,
+                                "filteredRate": bridge.yaw_controller.filtered_rate,
+                                "integral": bridge.yaw_controller.integral,
+                                "policyInput": bridge.yaw_controller.output,
+                                "angleError": bridge.yaw_controller.angle_error,
+                                "holding": bridge.yaw_controller.holding,
+                            },
                         }, separators=(",", ":")).encode("utf-8")
                     self.send_response(200)
                     self.send_header("Content-Type", "application/json")
@@ -465,6 +478,8 @@ class Lite3Bridge(Node):
 
     def _initialize_pose(self) -> None:
         mujoco.mj_resetData(self.model, self.data)
+        self.yaw_controller.reset()
+        self.last_yaw_control_time = float(self.data.time)
         initial = np.array([0.0, -1.35453, 2.54948] * 4)
         self.data.qpos[self.joint_qpos] = initial
         mujoco.mj_forward(self.model, self.data)
@@ -564,12 +579,29 @@ class Lite3Bridge(Node):
         velocity = self.latest_cmd.copy()
         if wall_now - self.last_cmd_time > self.cmd_timeout:
             velocity.fill(0.0)
-        normalized = np.clip(velocity / self.policy_velocity, -1.0, 1.0)
+        policy_command = velocity.copy()
+        sim_now = float(self.data.time)
+        dt = sim_now - self.last_yaw_control_time
+        self.last_yaw_control_time = sim_now
+        motor_fresh = wall_now - self.last_motor_command <= self.motor_command_timeout
+        if self.target_mode == RL_CONTROL and not self.paused and motor_fresh:
+            measured_yaw_rate = float(self.data.qvel[self.root_dof + 5])
+            policy_command[2] = self.yaw_controller.update(
+                float(velocity[2]), measured_yaw_rate, dt)
+        else:
+            self.yaw_controller.reset()
+            policy_command[2] = 0.0
+        normalized = np.clip(policy_command / self.policy_velocity, -1.0, 1.0)
         effective = Twist()
         effective.linear.x = float(velocity[0])
         effective.linear.y = float(velocity[1])
         effective.angular.z = float(velocity[2])
         self.command_pub.publish(effective)
+        policy_message = Twist()
+        policy_message.linear.x = float(policy_command[0])
+        policy_message.linear.y = float(policy_command[1])
+        policy_message.angular.z = float(policy_command[2])
+        self.policy_command_pub.publish(policy_message)
         self.sequence += 1
         payload = (f"LITE3_CMD_V1 {self.sequence} {self.target_mode} "
                    f"{normalized[0]:.6f} {normalized[1]:.6f} {normalized[2]:.6f}")

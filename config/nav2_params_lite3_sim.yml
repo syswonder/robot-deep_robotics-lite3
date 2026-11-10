@@ -79,7 +79,7 @@ controller_server:
       # than open-loop manual motion while validating clearance.
       max_vel_x: 0.35
       max_vel_y: 0.0
-      max_vel_theta: 0.6
+      max_vel_theta: 0.5
       # min_vel_theta: 0.05
       min_speed_xy: 0.0
       max_speed_xy: 0.35
@@ -136,8 +136,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: false
     feedback: "OPEN_LOOP"
-    max_velocity: [0.35, 0.0, 0.60]
-    min_velocity: [-0.35, 0.0, -0.60]
+    max_velocity: [0.35, 0.0, 0.50]
+    min_velocity: [-0.35, 0.0, -0.50]
     max_accel: [0.50, 0.0, 1.0]
     max_decel: [-0.50, 0.0, -1.0]
     odom_topic: "__ROBONIX_ODOM_TOPIC__"
