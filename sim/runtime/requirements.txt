@@ -1,0 +1,8 @@
+mujoco==3.3.7
+numpy>=1.23,<2
+Pillow>=10,<12
+grpcio==1.80.0
+protobuf==6.33.6
+mcp>=1.27,<2
+fastmcp>=3,<5
+pyyaml>=6

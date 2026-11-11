@@ -1,0 +1,18 @@
+manifestVersion: 1
+
+package:
+  name: robonix.primitive.lite3.sim.lidar
+  version: 0.1.0
+  vendor: robonix
+  description: Registers the Lite3 MuJoCo LaserScan and PointCloud2 streams.
+  license: Apache-2.0
+  tags: [primitive, lidar, simulation, mujoco, lite3]
+
+capability_id: lite3_sim_lidar
+
+build: bash scripts/build.sh
+start: bash scripts/start.sh
+
+capabilities:
+  - name: robonix/primitive/lidar/lidar
+  - name: robonix/primitive/lidar/lidar3d

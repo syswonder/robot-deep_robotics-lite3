@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>MuJoCo Robonix</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="application-name"   content="mujoco_robonix">
+        <meta name="description"        content="MuJoCo SPZ and mesh simulation workspace">
+        <meta name="keywords"           content="MuJoCo">
+        <meta name="author"             content="zalo">
+        <meta name="viewport"           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover, user-scalable=no, shrink-to-fit=0">
+        <meta name="theme-color"        content="#ffffff">
+    </head>
+
+    <body style="margin:0px; background-color:rgb(255, 255, 255); overflow:hidden; position:fixed; min-height: 100%;
+                 touch-action: none;
+                 -webkit-touch-callout: none; /* iOS Safari */
+                 -webkit-user-select: none; /* Safari */
+                 -khtml-user-select: none; /* Konqueror HTML */
+                 -moz-user-select: none; /* Old versions of Firefox */
+                 -ms-user-select: none; /* Internet Explorer/Edge */
+                 user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */">
+        <h1 hidden></h1> <!-- Puts the Lighthouse Score over 90 heheh-->
+
+        <!-- Allows three.js Examples to work without building -->
+        <script type="importmap">
+            { "imports": {
+                "three": "./node_modules/three/build/three.module.js",
+                "three/addons/": "./node_modules/three/examples/jsm/",
+                "@sparkjsdev/spark": "./node_modules/@sparkjsdev/spark/dist/spark.module.js"
+            } }
+        </script>
+
+
+        <div id="lite3-panel" style="position:fixed;left:12px;bottom:12px;z-index:20;padding:10px 12px;background:rgba(16,20,28,.86);color:#fff;border-radius:8px;font:13px system-ui;box-shadow:0 2px 14px #0008">
+          <div id="lite3-status" style="margin-bottom:8px">Connecting to Lite3…</div>
+          <button onclick="lite3Viewer.action('stand')">Stand</button>
+          <button onclick="lite3Viewer.action('lie_down')">Lie down</button>
+          <button onclick="lite3Viewer.action('reset')">Reset</button>
+          <button onclick="lite3Viewer.action('emergency_stop')">E-stop</button>
+          <button onclick="lite3Viewer.action('pause')">Pause</button>
+          <button onclick="lite3Viewer.action('resume')">Resume</button>
+        </div>
+        <div id="appbody" style="position: absolute;">
+            <!--<div id="error"></div>
+            <script type="module" src="./src/Debug.js"></script>-->
+            <script type="module" src="./src/main.js"></script>
+        </div>
+    </body>
+</html>

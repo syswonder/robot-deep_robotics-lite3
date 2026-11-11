@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "defaultEnvironment": "scenesmith_house_187",
+  "environments": [
+    {
+      "id": "scenesmith_house_187",
+      "label": "SceneSmith One-Bedroom Apartment 187 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_house_187/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_house_187/index.json",
+      "camera": {
+        "position": [
+          4.5,
+          2.4,
+          -0.5
+        ],
+        "target": [
+          2.0,
+          0.6,
+          -2.0
+        ]
+      },
+      "spawnPath": "./assets/environments/scenesmith_house_187/spawn.json"
+    }
+  ]
+}

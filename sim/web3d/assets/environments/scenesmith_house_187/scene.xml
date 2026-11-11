@@ -1,0 +1,719 @@
+<mujoco model="scene_scene_187">
+  <compiler angle="radian" boundmass="0.001" boundinertia="0.001" meshdir="meshes" texturedir="meshes/scenesmith" />
+  <visual>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1" />
+  </visual>
+  <asset>
+    <texture type="skybox" colorspace="auto" name="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+    <texture type="2d" colorspace="auto" name="grid" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="512" height="512" />
+    <texture type="2d" colorspace="linear" name="living_room_floors_floor_tex" file="living_room_floors_floor_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_north_wall_wall_tex" file="living_room_north_wall_wall_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_window_1_window_tex" file="living_room_window_1_window_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_north_wall_exterior_wall_tex" file="living_room_north_wall_exterior_wall_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_floors_floor_tex" file="bathroom_floors_floor_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_north_wall_wall_tex" file="bathroom_north_wall_wall_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_sofa_1767928193_sofa_tex" file="living_room_sofa_1767928193_sofa_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_coffee_table_1767928150_coffee_table_tex" file="living_room_coffee_table_1767928150_coffee_table_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_tv_unit_1767928404_tv_unit_tex" file="living_room_tv_unit_1767928404_tv_unit_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_side_table_1767928886_side_table_tex" file="living_room_side_table_1767928886_side_table_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_accent_chair_1767928886_accent_chair_tex" file="living_room_accent_chair_1767928886_accent_chair_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_painting_1767929932_painting_tex" file="living_room_painting_1767929932_painting_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_print_1767929932_print_tex" file="living_room_print_1767929932_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_clock_1767929932_clock_tex" file="living_room_clock_1767929932_clock_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_mirror_1767930123_mirror_tex" file="living_room_mirror_1767930123_mirror_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_mirror_1767929961_mirror_s0.9_0.9_0.9_tex" file="living_room_mirror_1767929961_mirror_s0.9_0.9_0.9_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_photographic_print_1767929988_photographic_print_tex" file="living_room_photographic_print_1767929988_photographic_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_flush_mount_1767930826_flush_mount_tex" file="living_room_flush_mount_1767930826_flush_mount_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_track_light_1767930826_track_light_tex" file="living_room_track_light_1767930826_track_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_smoke_detector_1767930990_smoke_detector_tex" file="living_room_smoke_detector_1767930990_smoke_detector_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_coffee_table_book_1767931447_coffee_table_book_tex" file="living_room_coffee_table_book_1767931447_coffee_table_book_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_tv_remote_control_1767931640_tv_remote_control_tex" file="living_room_tv_remote_control_1767931640_tv_remote_control_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_coaster_1767931447_coaster_tex" file="living_room_coaster_1767931447_coaster_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_water_glass_tumbler_1767931913_water_glass_tumbler_tex" file="living_room_water_glass_tumbler_1767931913_water_glass_tumbler_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_potted_succulent_plant_1767932104_potted_succulent_plant_tex" file="living_room_potted_succulent_plant_1767932104_potted_succulent_plant_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_soundbar_1767932309_soundbar_tex" file="living_room_soundbar_1767932309_soundbar_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_streaming_media_box_1767932352_streaming_media_box_tex" file="living_room_streaming_media_box_1767932352_streaming_media_box_texture.png" />
+    <texture type="2d" colorspace="linear" name="living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7_tex" file="living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_bed_1767933262_bed_tex" file="bedroom_bed_1767933262_bed_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_wardrobe_1767933204_E_door_2_2_combined_tex" file="bedroom_wardrobe_1767933204_E_door_2_2_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_wardrobe_1767933204_E_door_1_3_combined_tex" file="bedroom_wardrobe_1767933204_E_door_1_3_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_nightstand_1767933721_E_body_3_combined_tex" file="bedroom_nightstand_1767933721_E_body_3_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_nightstand_1767933721_E_door_1_combined_tex" file="bedroom_nightstand_1767933721_E_door_1_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_nightstand_1767933721_E_drawer_2_combined_tex" file="bedroom_nightstand_1767933721_E_drawer_2_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_rug_1767933713_rug_tex" file="bedroom_rug_1767933713_rug_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_floor_lamp_1767934686_floor_lamp_tex" file="bedroom_floor_lamp_1767934686_floor_lamp_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_bedroom_bench_1767934724_bedroom_bench_tex" file="bedroom_bedroom_bench_1767934724_bedroom_bench_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_canvas_print_1767935388_canvas_print_tex" file="bedroom_canvas_print_1767935388_canvas_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_photographic_print_1767935388_photographic_print_tex" file="bedroom_photographic_print_1767935388_photographic_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_clock_1767935437_clock_tex" file="bedroom_clock_1767935437_clock_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_mirror_1767935388_mirror_tex" file="bedroom_mirror_1767935388_mirror_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_flush_mount_1767936025_flush_mount_tex" file="bedroom_flush_mount_1767936025_flush_mount_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_tex" file="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_smoke_detector_1767936025_smoke_detector_tex" file="bedroom_smoke_detector_1767936025_smoke_detector_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_alarm_clock_1767936881_alarm_clock_tex" file="bedroom_alarm_clock_1767936881_alarm_clock_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_smartphone_1767937004_smartphone_tex" file="bedroom_smartphone_1767937004_smartphone_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_coaster_1767937669_coaster_tex" file="bedroom_coaster_1767937669_coaster_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_water_tumbler_1767937584_water_tumbler_tex" file="bedroom_water_tumbler_1767937584_water_tumbler_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_eyeglasses_1767937528_eyeglasses_tex" file="bedroom_eyeglasses_1767937528_eyeglasses_texture.png" />
+    <texture type="2d" colorspace="linear" name="bedroom_paperback_book_1767938299_paperback_book_tex" file="bedroom_paperback_book_1767938299_paperback_book_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_bathtub_1767939028_bathtub_tex" file="bathroom_bathtub_1767939028_bathtub_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_toilet_1767939028_toilet_tex" file="bathroom_toilet_1767939028_toilet_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_bathroom_vanity_1767940502_E_body_1_combined_tex" file="bathroom_bathroom_vanity_1767940502_E_body_1_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_tex" file="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_tex" file="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_mirror_1767941986_mirror_tex" file="bathroom_mirror_1767941986_mirror_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_towel_bar_1767941986_towel_bar_tex" file="bathroom_towel_bar_1767941986_towel_bar_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_print_1767941986_print_tex" file="bathroom_print_1767941986_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_abstract_print_1767941986_abstract_print_tex" file="bathroom_abstract_print_1767941986_abstract_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_recessed_light_1767942915_recessed_light_tex" file="bathroom_recessed_light_1767942915_recessed_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille_tex" file="bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_soap_dish_1767943943_soap_dish_tex" file="bathroom_soap_dish_1767943943_soap_dish_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_bar_soap_1767943943_bar_soap_tex" file="bathroom_bar_soap_1767943943_bar_soap_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_catchall_dish_1767944454_catchall_dish_tex" file="bathroom_catchall_dish_1767944454_catchall_dish_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_pump_bottle_1767944718_pump_bottle_tex" file="bathroom_pump_bottle_1767944718_pump_bottle_texture.png" />
+    <texture type="2d" colorspace="linear" name="bathroom_body_wash_1767944718_body_wash_tex" file="bathroom_body_wash_1767944718_body_wash_texture.png" />
+    <material name="grid" texture="grid" texrepeat="10 10" />
+    <material name="living_room_floors_floor_tex" texture="living_room_floors_floor_tex" />
+    <material name="living_room_north_wall_wall_tex" texture="living_room_north_wall_wall_tex" />
+    <material name="living_room_window_1_window_tex" texture="living_room_window_1_window_tex" />
+    <material name="living_room_north_wall_exterior_wall_tex" texture="living_room_north_wall_exterior_wall_tex" />
+    <material name="bathroom_floors_floor_tex" texture="bathroom_floors_floor_tex" />
+    <material name="bathroom_north_wall_wall_tex" texture="bathroom_north_wall_wall_tex" />
+    <material name="living_room_sofa_1767928193_sofa_tex" texture="living_room_sofa_1767928193_sofa_tex" />
+    <material name="living_room_coffee_table_1767928150_coffee_table_tex" texture="living_room_coffee_table_1767928150_coffee_table_tex" />
+    <material name="living_room_tv_unit_1767928404_tv_unit_tex" texture="living_room_tv_unit_1767928404_tv_unit_tex" />
+    <material name="living_room_side_table_1767928886_side_table_tex" texture="living_room_side_table_1767928886_side_table_tex" />
+    <material name="living_room_accent_chair_1767928886_accent_chair_tex" texture="living_room_accent_chair_1767928886_accent_chair_tex" />
+    <material name="living_room_painting_1767929932_painting_tex" texture="living_room_painting_1767929932_painting_tex" />
+    <material name="living_room_print_1767929932_print_tex" texture="living_room_print_1767929932_print_tex" />
+    <material name="living_room_clock_1767929932_clock_tex" texture="living_room_clock_1767929932_clock_tex" />
+    <material name="living_room_mirror_1767930123_mirror_tex" texture="living_room_mirror_1767930123_mirror_tex" />
+    <material name="living_room_mirror_1767929961_mirror_s0.9_0.9_0.9_tex" texture="living_room_mirror_1767929961_mirror_s0.9_0.9_0.9_tex" />
+    <material name="living_room_photographic_print_1767929988_photographic_print_tex" texture="living_room_photographic_print_1767929988_photographic_print_tex" />
+    <material name="living_room_flush_mount_1767930826_flush_mount_tex" texture="living_room_flush_mount_1767930826_flush_mount_tex" />
+    <material name="living_room_track_light_1767930826_track_light_tex" texture="living_room_track_light_1767930826_track_light_tex" />
+    <material name="living_room_smoke_detector_1767930990_smoke_detector_tex" texture="living_room_smoke_detector_1767930990_smoke_detector_tex" />
+    <material name="living_room_coffee_table_book_1767931447_coffee_table_book_tex" texture="living_room_coffee_table_book_1767931447_coffee_table_book_tex" />
+    <material name="living_room_tv_remote_control_1767931640_tv_remote_control_tex" texture="living_room_tv_remote_control_1767931640_tv_remote_control_tex" />
+    <material name="living_room_coaster_1767931447_coaster_tex" texture="living_room_coaster_1767931447_coaster_tex" />
+    <material name="living_room_water_glass_tumbler_1767931913_water_glass_tumbler_tex" texture="living_room_water_glass_tumbler_1767931913_water_glass_tumbler_tex" />
+    <material name="living_room_potted_succulent_plant_1767932104_potted_succulent_plant_tex" texture="living_room_potted_succulent_plant_1767932104_potted_succulent_plant_tex" />
+    <material name="living_room_soundbar_1767932309_soundbar_tex" texture="living_room_soundbar_1767932309_soundbar_tex" />
+    <material name="living_room_streaming_media_box_1767932352_streaming_media_box_tex" texture="living_room_streaming_media_box_1767932352_streaming_media_box_tex" />
+    <material name="living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7_tex" texture="living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7_tex" />
+    <material name="bedroom_bed_1767933262_bed_tex" texture="bedroom_bed_1767933262_bed_tex" />
+    <material name="bedroom_wardrobe_1767933204_E_door_2_2_combined_tex" texture="bedroom_wardrobe_1767933204_E_door_2_2_combined_tex" />
+    <material name="bedroom_wardrobe_1767933204_E_door_1_3_combined_tex" texture="bedroom_wardrobe_1767933204_E_door_1_3_combined_tex" />
+    <material name="bedroom_nightstand_1767933721_E_body_3_combined_tex" texture="bedroom_nightstand_1767933721_E_body_3_combined_tex" />
+    <material name="bedroom_nightstand_1767933721_E_door_1_combined_tex" texture="bedroom_nightstand_1767933721_E_door_1_combined_tex" />
+    <material name="bedroom_nightstand_1767933721_E_drawer_2_combined_tex" texture="bedroom_nightstand_1767933721_E_drawer_2_combined_tex" />
+    <material name="bedroom_rug_1767933713_rug_tex" texture="bedroom_rug_1767933713_rug_tex" />
+    <material name="bedroom_floor_lamp_1767934686_floor_lamp_tex" texture="bedroom_floor_lamp_1767934686_floor_lamp_tex" />
+    <material name="bedroom_bedroom_bench_1767934724_bedroom_bench_tex" texture="bedroom_bedroom_bench_1767934724_bedroom_bench_tex" />
+    <material name="bedroom_canvas_print_1767935388_canvas_print_tex" texture="bedroom_canvas_print_1767935388_canvas_print_tex" />
+    <material name="bedroom_photographic_print_1767935388_photographic_print_tex" texture="bedroom_photographic_print_1767935388_photographic_print_tex" />
+    <material name="bedroom_clock_1767935437_clock_tex" texture="bedroom_clock_1767935437_clock_tex" />
+    <material name="bedroom_mirror_1767935388_mirror_tex" texture="bedroom_mirror_1767935388_mirror_tex" />
+    <material name="bedroom_flush_mount_1767936025_flush_mount_tex" texture="bedroom_flush_mount_1767936025_flush_mount_tex" />
+    <material name="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_tex" texture="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_tex" />
+    <material name="bedroom_smoke_detector_1767936025_smoke_detector_tex" texture="bedroom_smoke_detector_1767936025_smoke_detector_tex" />
+    <material name="bedroom_alarm_clock_1767936881_alarm_clock_tex" texture="bedroom_alarm_clock_1767936881_alarm_clock_tex" />
+    <material name="bedroom_smartphone_1767937004_smartphone_tex" texture="bedroom_smartphone_1767937004_smartphone_tex" />
+    <material name="bedroom_coaster_1767937669_coaster_tex" texture="bedroom_coaster_1767937669_coaster_tex" />
+    <material name="bedroom_water_tumbler_1767937584_water_tumbler_tex" texture="bedroom_water_tumbler_1767937584_water_tumbler_tex" />
+    <material name="bedroom_eyeglasses_1767937528_eyeglasses_tex" texture="bedroom_eyeglasses_1767937528_eyeglasses_tex" />
+    <material name="bedroom_paperback_book_1767938299_paperback_book_tex" texture="bedroom_paperback_book_1767938299_paperback_book_tex" />
+    <material name="bathroom_bathtub_1767939028_bathtub_tex" texture="bathroom_bathtub_1767939028_bathtub_tex" />
+    <material name="bathroom_toilet_1767939028_toilet_tex" texture="bathroom_toilet_1767939028_toilet_tex" />
+    <material name="bathroom_bathroom_vanity_1767940502_E_body_1_combined_tex" texture="bathroom_bathroom_vanity_1767940502_E_body_1_combined_tex" />
+    <material name="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_tex" texture="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_tex" />
+    <material name="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_tex" texture="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_tex" />
+    <material name="bathroom_mirror_1767941986_mirror_tex" texture="bathroom_mirror_1767941986_mirror_tex" />
+    <material name="bathroom_towel_bar_1767941986_towel_bar_tex" texture="bathroom_towel_bar_1767941986_towel_bar_tex" />
+    <material name="bathroom_print_1767941986_print_tex" texture="bathroom_print_1767941986_print_tex" />
+    <material name="bathroom_abstract_print_1767941986_abstract_print_tex" texture="bathroom_abstract_print_1767941986_abstract_print_tex" />
+    <material name="bathroom_recessed_light_1767942915_recessed_light_tex" texture="bathroom_recessed_light_1767942915_recessed_light_tex" />
+    <material name="bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille_tex" texture="bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille_tex" />
+    <material name="bathroom_soap_dish_1767943943_soap_dish_tex" texture="bathroom_soap_dish_1767943943_soap_dish_tex" />
+    <material name="bathroom_bar_soap_1767943943_bar_soap_tex" texture="bathroom_bar_soap_1767943943_bar_soap_tex" />
+    <material name="bathroom_catchall_dish_1767944454_catchall_dish_tex" texture="bathroom_catchall_dish_1767944454_catchall_dish_tex" />
+    <material name="bathroom_pump_bottle_1767944718_pump_bottle_tex" texture="bathroom_pump_bottle_1767944718_pump_bottle_tex" />
+    <material name="bathroom_body_wash_1767944718_body_wash_tex" texture="bathroom_body_wash_1767944718_body_wash_tex" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_floor_visual_visual_mesh" file="scenesmith/living_room_floors_floor.obj" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_north_wall_visual_visual_mesh" file="scenesmith/living_room_north_wall_wall.obj" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_window_1_visual_visual_mesh" file="scenesmith/living_room_window_1_window.obj" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_south_wall_visual_visual_mesh" file="scenesmith/living_room_south_wall_wall.obj" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_east_wall_visual_visual_mesh" file="scenesmith/living_room_east_wall_wall.obj" />
+    <mesh name="room_geometry_living_room_room_geometry_body_link_west_wall_visual_visual_mesh" file="scenesmith/living_room_west_wall_wall.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_floor_visual_visual_mesh" file="scenesmith/bedroom_floors_floor.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_north_wall_visual_visual_mesh" file="scenesmith/bedroom_north_wall_wall.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_window_3_visual_visual_mesh" file="scenesmith/bedroom_window_3_window.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_south_wall_visual_visual_mesh" file="scenesmith/bedroom_south_wall_wall.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_east_wall_visual_visual_mesh" file="scenesmith/bedroom_east_wall_wall.obj" />
+    <mesh name="room_geometry_bedroom_room_geometry_body_link_window_4_visual_visual_mesh" file="scenesmith/bedroom_window_4_window.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_floor_visual_visual_mesh" file="scenesmith/bathroom_floors_floor.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_north_wall_visual_visual_mesh" file="scenesmith/bathroom_north_wall_wall.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_window_5_visual_visual_mesh" file="scenesmith/bathroom_window_5_window.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_south_wall_visual_visual_mesh" file="scenesmith/bathroom_south_wall_wall.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_east_wall_visual_visual_mesh" file="scenesmith/bathroom_east_wall_wall.obj" />
+    <mesh name="room_geometry_bathroom_room_geometry_body_link_west_wall_visual_visual_mesh" file="scenesmith/bathroom_west_wall_wall.obj" />
+    <mesh name="living_room_sofa_0_base_link_visual_visual_mesh" file="scenesmith/living_room_sofa_1767928193_sofa.obj" />
+    <mesh name="living_room_coffee_table_0_base_link_visual_visual_mesh" file="scenesmith/living_room_coffee_table_1767928150_coffee_table.obj" />
+    <mesh name="living_room_tv_unit_0_base_link_visual_visual_mesh" file="scenesmith/living_room_tv_unit_1767928404_tv_unit.obj" />
+    <mesh name="living_room_side_table_0_base_link_visual_visual_mesh" file="scenesmith/living_room_side_table_1767928886_side_table.obj" />
+    <mesh name="living_room_accent_chair_0_base_link_visual_visual_mesh" file="scenesmith/living_room_accent_chair_1767928886_accent_chair.obj" />
+    <mesh name="living_room_painting_0_base_link_visual_visual_mesh" file="scenesmith/living_room_painting_1767929932_painting.obj" />
+    <mesh name="living_room_print_0_base_link_visual_visual_mesh" file="scenesmith/living_room_print_1767929932_print.obj" />
+    <mesh name="living_room_clock_0_base_link_visual_visual_mesh" file="scenesmith/living_room_clock_1767929932_clock.obj" />
+    <mesh name="living_room_mirror_0_base_link_visual_visual_mesh" file="scenesmith/living_room_mirror_1767930123_mirror.obj" />
+    <mesh name="living_room_mirror_1_base_link_visual_visual_mesh" file="scenesmith/living_room_mirror_1767929961_mirror_s0.9_0.9_0.9.obj" />
+    <mesh name="living_room_photographic_print_0_base_link_visual_visual_mesh" file="scenesmith/living_room_photographic_print_1767929988_photographic_print.obj" />
+    <mesh name="living_room_flush_mount_0_base_link_visual_visual_mesh" file="scenesmith/living_room_flush_mount_1767930826_flush_mount.obj" />
+    <mesh name="living_room_track_light_0_base_link_visual_visual_mesh" file="scenesmith/living_room_track_light_1767930826_track_light.obj" />
+    <mesh name="living_room_smoke_detector_0_base_link_visual_visual_mesh" file="scenesmith/living_room_smoke_detector_1767930990_smoke_detector.obj" />
+    <mesh name="living_room_coffee_table_book_0_base_link_visual_visual_mesh" file="scenesmith/living_room_coffee_table_book_1767931447_coffee_table_book.obj" />
+    <mesh name="living_room_tv_remote_control_0_base_link_visual_visual_mesh" file="scenesmith/living_room_tv_remote_control_1767931640_tv_remote_control.obj" />
+    <mesh name="living_room_coaster_0_s0_0_base_link_visual_visual_mesh" file="scenesmith/living_room_coaster_1767931447_coaster.obj" />
+    <mesh name="living_room_water_glass_tumbler_0_base_link_visual_visual_mesh" file="scenesmith/living_room_water_glass_tumbler_1767931913_water_glass_tumbler.obj" />
+    <mesh name="living_room_potted_succulent_plant_0_base_link_visual_visual_mesh" file="scenesmith/living_room_potted_succulent_plant_1767932104_potted_succulent_plant.obj" />
+    <mesh name="living_room_soundbar_0_base_link_visual_visual_mesh" file="scenesmith/living_room_soundbar_1767932309_soundbar.obj" />
+    <mesh name="living_room_streaming_media_box_0_base_link_visual_visual_mesh" file="scenesmith/living_room_streaming_media_box_1767932352_streaming_media_box.obj" />
+    <mesh name="living_room_throw_blanket_0_base_link_visual_visual_mesh" file="scenesmith/living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7.obj" />
+    <mesh name="bedroom_bed_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_bed_1767933262_bed.obj" />
+    <mesh name="bedroom_wardrobe_0_E_body_1_P_d053e22ef8f39d2_visual_visual_mesh" file="scenesmith/bedroom_model_wardrobe_10_meshes_P_d053e22ef8f39d2.obj" />
+    <mesh name="bedroom_wardrobe_0_E_door_2_2_P_c8b941ebff331297_visual_visual_mesh" file="scenesmith/bedroom_wardrobe_1767933204_E_door_2_2_combined.obj" />
+    <mesh name="bedroom_wardrobe_0_E_door_1_3_P_da243560eb11fec9_visual_visual_mesh" file="scenesmith/bedroom_wardrobe_1767933204_E_door_1_3_combined.obj" />
+    <mesh name="bedroom_nightstand_0_E_body_3_P_c09130942137e3b0_visual_visual_mesh" file="scenesmith/bedroom_nightstand_1767933721_E_body_3_combined.obj" />
+    <mesh name="bedroom_nightstand_0_E_door_1_P_a7c0660b12fd2eae_visual_visual_mesh" file="scenesmith/bedroom_nightstand_1767933721_E_door_1_combined.obj" />
+    <mesh name="bedroom_nightstand_0_E_drawer_2_P_81588779f4e87b0_visual_visual_mesh" file="scenesmith/bedroom_nightstand_1767933721_E_drawer_2_combined.obj" />
+    <mesh name="bedroom_rug_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_rug_1767933713_rug.obj" />
+    <mesh name="bedroom_floor_lamp_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_floor_lamp_1767934686_floor_lamp.obj" />
+    <mesh name="bedroom_bedroom_bench_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_bedroom_bench_1767934724_bedroom_bench.obj" />
+    <mesh name="bedroom_canvas_print_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_canvas_print_1767935388_canvas_print.obj" />
+    <mesh name="bedroom_photographic_print_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_photographic_print_1767935388_photographic_print.obj" />
+    <mesh name="bedroom_clock_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_clock_1767935437_clock.obj" />
+    <mesh name="bedroom_mirror_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_mirror_1767935388_mirror.obj" />
+    <mesh name="bedroom_flush_mount_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_flush_mount_1767936025_flush_mount.obj" />
+    <mesh name="bedroom_cylinder_spotlight_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_cylinder_spotlight_1767936280_cylinder_spotlight.obj" />
+    <mesh name="bedroom_smoke_detector_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_smoke_detector_1767936025_smoke_detector.obj" />
+    <mesh name="bedroom_alarm_clock_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_alarm_clock_1767936881_alarm_clock.obj" />
+    <mesh name="bedroom_smartphone_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_smartphone_1767937004_smartphone.obj" />
+    <mesh name="bedroom_coaster_0_s0_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_coaster_1767937669_coaster.obj" />
+    <mesh name="bedroom_water_tumbler_0_s0_1_base_link_visual_visual_mesh" file="scenesmith/bedroom_water_tumbler_1767937584_water_tumbler.obj" />
+    <mesh name="bedroom_eyeglasses_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_eyeglasses_1767937528_eyeglasses.obj" />
+    <mesh name="bedroom_paperback_book_0_base_link_visual_visual_mesh" file="scenesmith/bedroom_paperback_book_1767938299_paperback_book.obj" />
+    <mesh name="bathroom_bathtub_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_bathtub_1767939028_bathtub.obj" />
+    <mesh name="bathroom_toilet_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_toilet_1767939028_toilet.obj" />
+    <mesh name="bathroom_bathroom_vanity_0_E_body_1_P_a85978e2d42ee7dd_visual_visual_mesh" file="scenesmith/bathroom_bathroom_vanity_1767940502_E_body_1_combined.obj" />
+    <mesh name="bathroom_bathroom_vanity_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual_mesh" file="scenesmith/bathroom_bathroom_vanity_1767940502_E_door_3_11_combined.obj" />
+    <mesh name="bathroom_bathroom_vanity_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual_mesh" file="scenesmith/bathroom_bathroom_vanity_1767940502_E_door_4_14_combined.obj" />
+    <mesh name="bathroom_bathroom_vanity_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual_mesh" file="scenesmith/bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined.obj" />
+    <mesh name="bathroom_bathroom_vanity_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual_mesh" file="scenesmith/bathroom_bathroom_vanity_1767940502_E_drawer_2_24_combined.obj" />
+    <mesh name="bathroom_mirror_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_mirror_1767941986_mirror.obj" />
+    <mesh name="bathroom_towel_bar_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_towel_bar_1767941986_towel_bar.obj" />
+    <mesh name="bathroom_print_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_print_1767941986_print.obj" />
+    <mesh name="bathroom_abstract_print_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_abstract_print_1767941986_abstract_print.obj" />
+    <mesh name="bathroom_recessed_light_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_recessed_light_1767942915_recessed_light.obj" />
+    <mesh name="bathroom_ceiling_vent_grille_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille.obj" />
+    <mesh name="bathroom_soap_dish_0_s0_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_soap_dish_1767943943_soap_dish.obj" />
+    <mesh name="bathroom_bar_soap_0_s0_1_base_link_visual_visual_mesh" file="scenesmith/bathroom_bar_soap_1767943943_bar_soap.obj" />
+    <mesh name="bathroom_catchall_dish_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_catchall_dish_1767944454_catchall_dish.obj" />
+    <mesh name="bathroom_pump_bottle_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_pump_bottle_1767944718_pump_bottle.obj" />
+    <mesh name="bathroom_body_wash_0_base_link_visual_visual_mesh" file="scenesmith/bathroom_body_wash_1767944718_body_wash.obj" />
+  </asset>
+  <worldbody>
+    <body name="room_geometry_living_room" pos="2.5 2 0">
+      <body name="room_geometry_living_room_room_geometry_body_link">
+        <geom name="room_geometry_living_room_room_geometry_body_link_floor_collision_collision" size="2.5 2 0.05" pos="0 0 -0.05" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_north_wall_collision_collision" size="2.5 0.025 1.35" pos="0 1.975 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_south_wall_collision_0_collision" size="1.26527 0.025 1.35" pos="-1.23473 -1.975 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_south_wall_collision_1_collision" size="0.759729 0.025 1.35" pos="1.74027 -1.975 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_east_wall_collision_0_collision" size="0.025 0.479705 1.35" pos="2.475 -1.5203 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_east_wall_collision_1_collision" size="0.025 1.0703 1.35" pos="2.475 0.929705 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_west_wall_collision_0_collision" size="0.025 0.89353 1.35" pos="-2.475 -1.10647 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_west_wall_collision_1_collision" size="0.025 0.65647 1.35" pos="-2.475 1.34353 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_floor_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_floors_floor_tex" mesh="room_geometry_living_room_room_geometry_body_link_floor_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_north_wall_visual_visual" pos="0 1.975 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_window_1_visual_visual" pos="-1.12598 1.975 1.5" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_window_1_window_tex" mesh="room_geometry_living_room_room_geometry_body_link_window_1_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_window_2_visual_visual" pos="1.37473 1.975 1.5" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_window_1_window_tex" mesh="room_geometry_living_room_room_geometry_body_link_window_1_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_north_wall_exterior_visual_visual" pos="0 2.025 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_south_wall_visual_visual" pos="0 -1.975 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_south_wall_exterior_visual_visual" pos="0 -2.025 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_east_wall_visual_visual" pos="2.475 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_living_room_room_geometry_body_link_west_wall_visual_visual" pos="-2.475 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_west_wall_visual_visual_mesh" group="1" />
+      </body>
+    </body>
+    <body name="room_geometry_bedroom" pos="6.75 2 0">
+      <body name="room_geometry_bedroom_room_geometry_body_link">
+        <geom name="room_geometry_bedroom_room_geometry_body_link_floor_collision_collision" size="1.75 2 0.05" pos="0 0 -0.05" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_north_wall_collision_collision" size="1.75 0.025 1.35" pos="0 1.975 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_south_wall_collision_collision" size="1.75 0.025 1.35" pos="0 -1.975 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_east_wall_collision_collision" size="0.025 2 1.35" pos="1.725 0 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_west_wall_collision_0_collision" size="0.025 0.479705 1.35" pos="-1.725 -1.5203 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_west_wall_collision_1_collision" size="0.025 1.0703 1.35" pos="-1.725 0.929705 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_floor_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_floors_floor_tex" mesh="room_geometry_bedroom_room_geometry_body_link_floor_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_north_wall_visual_visual" pos="0 1.975 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_window_3_visual_visual" pos="-0.467009 1.975 1.5" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_window_1_window_tex" mesh="room_geometry_bedroom_room_geometry_body_link_window_3_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_north_wall_exterior_visual_visual" pos="0 2.025 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_south_wall_visual_visual" pos="0 -1.975 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_south_wall_exterior_visual_visual" pos="0 -2.025 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_east_wall_visual_visual" pos="1.725 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_window_4_visual_visual" pos="1.725 -0.113118 1.5" type="mesh" contype="0" conaffinity="0" material="living_room_window_1_window_tex" mesh="room_geometry_bedroom_room_geometry_body_link_window_4_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_east_wall_exterior_visual_visual" pos="1.775 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bedroom_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bedroom_room_geometry_body_link_west_wall_visual_visual" pos="-1.725 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_wall_tex" mesh="room_geometry_living_room_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+      </body>
+    </body>
+    <body name="room_geometry_bathroom" pos="-1.1 2 0">
+      <body name="room_geometry_bathroom_room_geometry_body_link">
+        <geom name="room_geometry_bathroom_room_geometry_body_link_floor_collision_collision" size="1.1 1.25 0.05" pos="0 0 -0.05" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_north_wall_collision_collision" size="1.1 0.025 1.35" pos="0 1.225 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_south_wall_collision_collision" size="1.1 0.025 1.35" pos="0 -1.225 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_east_wall_collision_0_collision" size="0.025 0.51853 1.35" pos="1.075 -0.73147 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_east_wall_collision_1_collision" size="0.025 0.28147 1.35" pos="1.075 0.96853 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_west_wall_collision_collision" size="0.025 1.25 1.35" pos="-1.075 0 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_floor_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_floors_floor_tex" mesh="room_geometry_bathroom_room_geometry_body_link_floor_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_north_wall_visual_visual" pos="0 1.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="bathroom_north_wall_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_window_5_visual_visual" pos="0.00918624 1.225 1.9" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_window_1_window_tex" mesh="room_geometry_bathroom_room_geometry_body_link_window_5_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_north_wall_exterior_visual_visual" pos="0 1.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_south_wall_visual_visual" pos="0 -1.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="bathroom_north_wall_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_south_wall_exterior_visual_visual" pos="0 -1.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_east_wall_visual_visual" pos="1.075 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="bathroom_north_wall_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_west_wall_visual_visual" pos="-1.075 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="bathroom_north_wall_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_west_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_bathroom_room_geometry_body_link_west_wall_exterior_visual_visual" pos="-1.125 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="living_room_north_wall_exterior_wall_tex" mesh="room_geometry_bathroom_room_geometry_body_link_west_wall_visual_visual_mesh" group="1" />
+      </body>
+    </body>
+    <body name="living_room_sofa_0" pos="1.69981 3.49357 -0.00407064" quat="0.000218661 -0.00108745 0.00150724 -0.999998">
+      <body name="living_room_sofa_0_base_link">
+        <geom name="living_room_sofa_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_sofa_1767928193_sofa_tex" mesh="living_room_sofa_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_sofa_0_static_collision" type="box" pos="0 0 0.428892" size="1.15 0.4484245 0.428892" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coffee_table_0" pos="1.70009 2.39908 -0.00176103" quat="0.999999 -0.00143446 0.00020765 0.000686808">
+      <body name="living_room_coffee_table_0_base_link">
+        <geom name="living_room_coffee_table_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coffee_table_1767928150_coffee_table_tex" mesh="living_room_coffee_table_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coffee_table_0_static_collision" type="box" pos="0 0 0.1611023" size="0.6 0.2670203 0.1611023" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_tv_unit_0" pos="1.5217 0.2929 -0.00121544" quat="1 0.000267499 -0.000128582 -9.19514e-06">
+      <body name="living_room_tv_unit_0_base_link">
+        <geom name="living_room_tv_unit_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_tv_unit_1767928404_tv_unit_tex" mesh="living_room_tv_unit_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_tv_unit_0_static_collision" type="box" pos="0 0 0.6138035" size="0.8 0.2343001 0.6138035" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_side_table_0" pos="3.13028 3.25036 -0.000265779" quat="0.999999 0.000666375 0.000453643 -0.000928421">
+      <body name="living_room_side_table_0_base_link">
+        <geom name="living_room_side_table_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_side_table_1767928886_side_table_tex" mesh="living_room_side_table_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_side_table_0_static_collision" type="box" pos="0 0 0.2816796" size="0.225 0.2114589 0.2816796" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_accent_chair_0" pos="2.8486 2.10187 -0.000373718" quat="0.383672 0.000165885 0.000262785 0.923469">
+      <body name="living_room_accent_chair_0_base_link">
+        <geom name="living_room_accent_chair_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_accent_chair_1767928886_accent_chair_tex" mesh="living_room_accent_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_accent_chair_0_static_collision" type="box" pos="0 0 0.4960007" size="0.3786168 0.425 0.4960007" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_painting_0" pos="2.65176 3.95 1.58" quat="0 0 0 1">
+      <body name="living_room_painting_0_base_link">
+        <geom name="living_room_painting_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_painting_1767929932_painting_tex" mesh="living_room_painting_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_painting_0_static_collision" type="box" pos="0 0.007530635 0" size="0.35 0.007530635 0.5187082" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_print_0" pos="1.20022 0.05 1.50048" quat="1 0 0.000742699 0">
+      <body name="living_room_print_0_base_link">
+        <geom name="living_room_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_print_1767929932_print_tex" mesh="living_room_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_print_0_static_collision" type="box" pos="0 0.009947685 0" size="0.6129954 0.009947685 0.375" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_clock_0" pos="4.19858 0.05 1.74752" quat="1 0 0.000169175 0">
+      <body name="living_room_clock_0_base_link">
+        <geom name="living_room_clock_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_clock_1767929932_clock_tex" mesh="living_room_clock_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_clock_0_static_collision" type="box" pos="0 0.0102426 0" size="0.2251521 0.0102426 0.225" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_mirror_0" pos="4.95 2.90124 1.54864" quat="0.707107 -0.000479053 0.000479053 0.707107">
+      <body name="living_room_mirror_0_base_link">
+        <geom name="living_room_mirror_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_mirror_1767930123_mirror_tex" mesh="living_room_mirror_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_mirror_0_static_collision" type="box" pos="0 0.00394982 0" size="0.45 0.005 0.4501426" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_mirror_1" pos="0.05 3.34936 1.45064" quat="0.707107 0 0 -0.707107">
+      <body name="living_room_mirror_1_base_link">
+        <geom name="living_room_mirror_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_mirror_1767929961_mirror_s0.9_0.9_0.9_tex" mesh="living_room_mirror_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_mirror_1_static_collision" type="box" pos="0 0.006253615 0" size="0.5218416 0.006253625 0.3375" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_photographic_print_0" pos="0.05 0.900867 1.45091" quat="0.707107 -0.000490756 -0.000490756 -0.707107">
+      <body name="living_room_photographic_print_0_base_link">
+        <geom name="living_room_photographic_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_photographic_print_1767929988_photographic_print_tex" mesh="living_room_photographic_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_photographic_print_0_static_collision" type="box" pos="0 0.01439379 0" size="0.35 0.01439379 0.4386725" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_flush_mount_0" pos="2.5 2 2.7">
+      <body name="living_room_flush_mount_0_base_link">
+        <geom name="living_room_flush_mount_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_flush_mount_1767930826_flush_mount_tex" mesh="living_room_flush_mount_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_flush_mount_0_static_collision" type="box" pos="0 0 -0.02146206" size="0.3 0.2714221 0.02146206" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_track_light_0" pos="2.5 0.75 2.7">
+      <body name="living_room_track_light_0_base_link">
+        <geom name="living_room_track_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_track_light_1767930826_track_light_tex" mesh="living_room_track_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_track_light_0_static_collision" type="box" pos="0 0 -0.1481466" size="0.5982646 0.09 0.1481466" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_smoke_detector_0" pos="4.25 0.5 2.7">
+      <body name="living_room_smoke_detector_0_base_link">
+        <geom name="living_room_smoke_detector_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_smoke_detector_1767930990_smoke_detector_tex" mesh="living_room_smoke_detector_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_smoke_detector_0_static_collision" type="box" pos="0 0 -0.02054434" size="0.07 0.06997939 0.02054434" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coffee_table_book_0" pos="1.52987 2.43184 0.319209" quat="0.998736 -0.00228771 0.000789423 -0.0502135">
+      <body name="living_room_coffee_table_book_0_base_link">
+        <geom name="living_room_coffee_table_book_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coffee_table_book_1767931447_coffee_table_book_tex" mesh="living_room_coffee_table_book_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coffee_table_book_0_static_collision" type="box" pos="0 0 0.01385916" size="0.11 0.13411 0.01385916" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coaster_0_s0_0" pos="2.09978 2.4012 0.31935" quat="0.999987 -0.00183241 -9.82715e-06 0.00473589">
+      <body name="living_room_coaster_0_s0_0_base_link">
+        <geom name="living_room_coaster_0_s0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coaster_1767931447_coaster_tex" mesh="living_room_coaster_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coaster_0_s0_0_static_collision" type="box" pos="0 0 0.004188675" size="0.05 0.06369904 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coaster_0_s0_1" pos="2.09977 2.4012 0.327672" quat="0.999987 -0.00203126 -0.00012522 0.00471457">
+      <body name="living_room_coaster_0_s0_1_base_link">
+        <geom name="living_room_coaster_0_s0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coaster_1767931447_coaster_tex" mesh="living_room_coaster_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coaster_0_s0_1_static_collision" type="box" pos="0 0 0.004188675" size="0.05 0.06369904 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coaster_0_s0_2" pos="2.09977 2.4012 0.335995" quat="0.999986 -0.00222963 -0.000249439 0.00471437">
+      <body name="living_room_coaster_0_s0_2_base_link">
+        <geom name="living_room_coaster_0_s0_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coaster_1767931447_coaster_tex" mesh="living_room_coaster_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coaster_0_s0_2_static_collision" type="box" pos="0 0 0.004188675" size="0.05 0.06369904 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_coaster_0_s0_3" pos="2.09976 2.40119 0.344318" quat="0.999986 -0.00242704 -0.000375862 0.00472369">
+      <body name="living_room_coaster_0_s0_3_base_link">
+        <geom name="living_room_coaster_0_s0_3_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_coaster_1767931447_coaster_tex" mesh="living_room_coaster_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_coaster_0_s0_3_static_collision" type="box" pos="0 0 0.004188675" size="0.05 0.06369904 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_soundbar_0" pos="1.52327 0.39 0.276687" quat="0.999973 -0.00199703 -0.000139562 -0.00707601">
+      <body name="living_room_soundbar_0_base_link">
+        <geom name="living_room_soundbar_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_soundbar_1767932309_soundbar_tex" mesh="living_room_soundbar_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_soundbar_0_static_collision" type="box" pos="0 0 0.03792372" size="0.39 0.06308389 0.03792372" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_streaming_media_box_0" pos="2.12999 0.395128 0.279188" quat="0.998862 -0.00323185 -0.0022052 -0.0475384">
+      <body name="living_room_streaming_media_box_0_base_link">
+        <geom name="living_room_streaming_media_box_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_streaming_media_box_1767932352_streaming_media_box_tex" mesh="living_room_streaming_media_box_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_streaming_media_box_0_static_collision" type="box" pos="0 0 0.01284411" size="0.08 0.08015566 0.01284411" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="living_room_throw_blanket_0" pos="1.17928 3.22724 0.470044" quat="0.0028061 -0.00845163 0.0176032 -0.999805">
+      <body name="living_room_throw_blanket_0_base_link">
+        <geom name="living_room_throw_blanket_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_throw_blanket_1767932659_throw_blanket_s0.7_0.7_0.7_tex" mesh="living_room_throw_blanket_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="living_room_throw_blanket_0_static_collision" type="box" pos="0 0 0.03323255" size="0.1225 0.1066625 0.03323255" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_bed_0" pos="6.79954 1.06894 -0.00380924" quat="0.999998 -0.00164995 -0.000225855 -0.000866915">
+      <body name="bedroom_bed_0_base_link">
+        <geom name="bedroom_bed_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_bed_1767933262_bed_tex" mesh="bedroom_bed_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_bed_0_static_collision" type="box" pos="0 0 0.397" size="0.825 0.9330724 0.397" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_wardrobe_0" pos="5.36307 3.05163 0.00993899" quat="0.707838 8.23785e-07 2.2828e-07 -0.706374">
+      <body name="bedroom_wardrobe_0_E_body_1">
+        <geom name="bedroom_wardrobe_0_E_body_1_P_d053e22ef8f39d2_visual_visual" type="mesh" contype="0" conaffinity="0" rgba="0.834983 0.815693 0.815693 1" mesh="bedroom_wardrobe_0_E_body_1_P_d053e22ef8f39d2_visual_visual_mesh" group="1" />
+        <body name="bedroom_wardrobe_0_E_door_2_2">
+          <geom name="bedroom_wardrobe_0_E_door_2_2_P_c8b941ebff331297_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_wardrobe_1767933204_E_door_2_2_combined_tex" mesh="bedroom_wardrobe_0_E_door_2_2_P_c8b941ebff331297_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bedroom_wardrobe_0_E_door_1_3">
+          <geom name="bedroom_wardrobe_0_E_door_1_3_P_da243560eb11fec9_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_wardrobe_1767933204_E_door_1_3_combined_tex" mesh="bedroom_wardrobe_0_E_door_1_3_P_da243560eb11fec9_visual_visual_mesh" group="1" />
+        </body>
+      </body>
+      <geom name="bedroom_wardrobe_0_static_collision" type="box" pos="0 0 1.14705" size="0.8709 0.28705 1.14705" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_nightstand_0" pos="5.7398 0.300084 0.00336799" quat="0.999999 0 0 0.00154264">
+      <body name="bedroom_nightstand_0_E_body_3">
+        <geom name="bedroom_nightstand_0_E_body_3_P_c09130942137e3b0_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_body_3_combined_tex" mesh="bedroom_nightstand_0_E_body_3_P_c09130942137e3b0_visual_visual_mesh" group="1" />
+        <body name="bedroom_nightstand_0_E_door_1">
+          <geom name="bedroom_nightstand_0_E_door_1_P_a7c0660b12fd2eae_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_door_1_combined_tex" mesh="bedroom_nightstand_0_E_door_1_P_a7c0660b12fd2eae_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bedroom_nightstand_0_E_drawer_2">
+          <geom name="bedroom_nightstand_0_E_drawer_2_P_81588779f4e87b0_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_drawer_2_combined_tex" mesh="bedroom_nightstand_0_E_drawer_2_P_81588779f4e87b0_visual_visual_mesh" group="1" />
+        </body>
+      </body>
+      <geom name="bedroom_nightstand_0_static_collision" type="box" pos="0 0 0.2121397" size="0.2163468 0.1607201 0.2121397" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_rug_0" pos="6.80206 1.32795 0" quat="0.999997 0 0 -0.00254976">
+      <body name="bedroom_rug_0_base_link">
+        <geom name="bedroom_rug_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_rug_1767933713_rug_tex" mesh="bedroom_rug_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_rug_0_static_collision" type="box" pos="0 0 0.0015" size="1.2 1.15 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_nightstand_1" pos="7.85851 0.303406 0" quat="1 0 0 0.000723617">
+      <body name="bedroom_nightstand_1_E_body_3">
+        <geom name="bedroom_nightstand_1_E_body_3_P_c09130942137e3b0_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_body_3_combined_tex" mesh="bedroom_nightstand_0_E_body_3_P_c09130942137e3b0_visual_visual_mesh" group="1" />
+        <body name="bedroom_nightstand_1_E_door_1">
+          <geom name="bedroom_nightstand_1_E_door_1_P_a7c0660b12fd2eae_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_door_1_combined_tex" mesh="bedroom_nightstand_0_E_door_1_P_a7c0660b12fd2eae_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bedroom_nightstand_1_E_drawer_2">
+          <geom name="bedroom_nightstand_1_E_drawer_2_P_81588779f4e87b0_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_nightstand_1767933721_E_drawer_2_combined_tex" mesh="bedroom_nightstand_0_E_drawer_2_P_81588779f4e87b0_visual_visual_mesh" group="1" />
+        </body>
+      </body>
+      <geom name="bedroom_nightstand_1_static_collision" type="box" pos="0 0 0.2121397" size="0.2163468 0.1607201 0.2121397" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_floor_lamp_0" pos="8.29261 0.599493 -0.000111037" quat="0.999999 4.69916e-05 6.55994e-05 0.00157794">
+      <body name="bedroom_floor_lamp_0_base_link">
+        <geom name="bedroom_floor_lamp_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_floor_lamp_1767934686_floor_lamp_tex" mesh="bedroom_floor_lamp_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_floor_lamp_0_static_collision" type="box" pos="0 0 0.5552293" size="0.11 0.1084317 0.5552293" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_bedroom_bench_0" pos="6.79777 2.55021 -0.00313843" quat="0.999989 0.00441433 -0.001006 0.00103271">
+      <body name="bedroom_bedroom_bench_0_base_link">
+        <geom name="bedroom_bedroom_bench_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_bedroom_bench_1767934724_bedroom_bench_tex" mesh="bedroom_bedroom_bench_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_bedroom_bench_0_static_collision" type="box" pos="0 0 0.1966921" size="0.6 0.1598494 0.1966921" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_canvas_print_0" pos="6.74897 0.05 1.59943">
+      <body name="bedroom_canvas_print_0_base_link">
+        <geom name="bedroom_canvas_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_canvas_print_1767935388_canvas_print_tex" mesh="bedroom_canvas_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_canvas_print_0_static_collision" type="box" pos="0 0.0075404 0" size="0.7 0.0075404 0.3840125" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_photographic_print_0" pos="8.45 3.25067 1.50101" quat="0.707107 0 0 0.707107">
+      <body name="bedroom_photographic_print_0_base_link">
+        <geom name="bedroom_photographic_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_photographic_print_1767935388_photographic_print_tex" mesh="bedroom_photographic_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_photographic_print_0_static_collision" type="box" pos="0 0.0066982 0" size="0.2859358 0.0066982 0.375" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_photographic_print_1" pos="8.45 0.6434 1.50123" quat="0.707107 0 0 0.707107">
+      <body name="bedroom_photographic_print_1_base_link">
+        <geom name="bedroom_photographic_print_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_photographic_print_1767935388_photographic_print_tex" mesh="bedroom_photographic_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_photographic_print_1_static_collision" type="box" pos="0 0.0066982 0" size="0.2859358 0.0066982 0.375" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_clock_0" pos="7.69799 3.95 1.69852" quat="0 0 0 1">
+      <body name="bedroom_clock_0_base_link">
+        <geom name="bedroom_clock_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_clock_1767935437_clock_tex" mesh="bedroom_clock_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_clock_0_static_collision" type="box" pos="0 0.01556591 0" size="0.2 0.01556589 0.1999279" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_mirror_0" pos="5.05 0.4492 1.05048" quat="0.707107 0 0 -0.707107">
+      <body name="bedroom_mirror_0_base_link">
+        <geom name="bedroom_mirror_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_mirror_1767935388_mirror_tex" mesh="bedroom_mirror_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_mirror_0_static_collision" type="box" pos="0 0.006924335 0" size="0.3910104 0.006924335 0.8" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_flush_mount_0" pos="6.75 2 2.7">
+      <body name="bedroom_flush_mount_0_base_link">
+        <geom name="bedroom_flush_mount_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_flush_mount_1767936025_flush_mount_tex" mesh="bedroom_flush_mount_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_flush_mount_0_static_collision" type="box" pos="0 0 -0.02502286" size="0.225 0.1849774 0.02502286" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_cylinder_spotlight_0" pos="5.85 1.3 2.7">
+      <body name="bedroom_cylinder_spotlight_0_base_link">
+        <geom name="bedroom_cylinder_spotlight_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_tex" mesh="bedroom_cylinder_spotlight_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_cylinder_spotlight_0_static_collision" type="box" pos="0 0 -0.06980775" size="0.04 0.05418633 0.06980775" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_cylinder_spotlight_1" pos="7.65 1.3 2.7">
+      <body name="bedroom_cylinder_spotlight_1_base_link">
+        <geom name="bedroom_cylinder_spotlight_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_cylinder_spotlight_1767936280_cylinder_spotlight_tex" mesh="bedroom_cylinder_spotlight_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_cylinder_spotlight_1_static_collision" type="box" pos="0 0 -0.06980775" size="0.04 0.05418633 0.06980775" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_smoke_detector_0" pos="5.44764 2.0003 2.7">
+      <body name="bedroom_smoke_detector_0_base_link">
+        <geom name="bedroom_smoke_detector_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_smoke_detector_1767936025_smoke_detector_tex" mesh="bedroom_smoke_detector_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_smoke_detector_0_static_collision" type="box" pos="0 0 -0.01474762" size="0.06 0.05999732 0.01474762" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_alarm_clock_0" pos="5.67041 0.31947 0.429974" quat="0.70776 -0.00288179 0.00264731 -0.706442">
+      <body name="bedroom_alarm_clock_0_base_link">
+        <geom name="bedroom_alarm_clock_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_alarm_clock_1767936881_alarm_clock_tex" mesh="bedroom_alarm_clock_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_alarm_clock_0_static_collision" type="box" pos="0 0 0.03" size="0.0830509 0.0245205 0.03" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_smartphone_0" pos="5.82864 0.319308 0.429101" quat="0.999979 0.00625721 -0.000534593 0.00159634">
+      <body name="bedroom_smartphone_0_base_link">
+        <geom name="bedroom_smartphone_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_smartphone_1767937004_smartphone_tex" mesh="bedroom_smartphone_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_smartphone_0_static_collision" type="box" pos="0 0 0.00531482" size="0.0375 0.07930779 0.00531482" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_coaster_0_s0_0" pos="7.94858 0.252149 0.426127" quat="0.999619 0.00629734 -0.000149645 0.0268865">
+      <body name="bedroom_coaster_0_s0_0_base_link">
+        <geom name="bedroom_coaster_0_s0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_coaster_1767937669_coaster_tex" mesh="bedroom_coaster_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_coaster_0_s0_0_static_collision" type="box" pos="0 0 0.004596115" size="0.045 0.04383484 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_water_tumbler_0_s0_1" pos="7.94858 0.252159 0.43429" quat="0.999622 -0.00308236 0.00034919 0.0273199">
+      <body name="bedroom_water_tumbler_0_s0_1_base_link">
+        <geom name="bedroom_water_tumbler_0_s0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_water_tumbler_1767937584_water_tumbler_tex" mesh="bedroom_water_tumbler_0_s0_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_water_tumbler_0_s0_1_static_collision" type="box" pos="0 0 0.04644256" size="0.04 0.04132735 0.04644256" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_eyeglasses_0" pos="7.81219 0.331907 0.425472" quat="0.99667 0.00180289 0.00995701 -0.0809162">
+      <body name="bedroom_eyeglasses_0_base_link">
+        <geom name="bedroom_eyeglasses_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_eyeglasses_1767937528_eyeglasses_tex" mesh="bedroom_eyeglasses_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_eyeglasses_0_static_collision" type="box" pos="0 0 0.01933028" size="0.07 0.06723165 0.01933028" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bedroom_paperback_book_0" pos="7.19783 2.57099 0.384483" quat="0.705899 0.00549638 -0.00460595 0.708276">
+      <body name="bedroom_paperback_book_0_base_link">
+        <geom name="bedroom_paperback_book_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bedroom_paperback_book_1767938299_paperback_book_tex" mesh="bedroom_paperback_book_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bedroom_paperback_book_0_static_collision" type="box" pos="0 0 0.01567117" size="0.08 0.1150768 0.01567117" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_bathtub_0" pos="-1.71732 2.0047 -0.00115654" quat="0.707621 -0.000131629 0.00031969 0.706592">
+      <body name="bathroom_bathtub_0_base_link">
+        <geom name="bathroom_bathtub_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathtub_1767939028_bathtub_tex" mesh="bathroom_bathtub_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_bathtub_0_static_collision" type="box" pos="0 0 0.2542784" size="0.85 0.4322121 0.2542784" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_toilet_0" pos="-0.700205 1.08888 -0.000110207" quat="1 0.000217487 4.31972e-05 -1.81653e-07">
+      <body name="bathroom_toilet_0_base_link">
+        <geom name="bathroom_toilet_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_toilet_1767939028_toilet_tex" mesh="bathroom_toilet_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_toilet_0_static_collision" type="box" pos="0 0 0.3640593" size="0.19 0.2783798 0.3640593" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_bathroom_vanity_0" pos="-0.217956 1.14988 0.00470637" quat="0.707109 -1.23894e-05 -1.2504e-05 0.707105">
+      <body name="bathroom_bathroom_vanity_0_E_body_1">
+        <geom name="bathroom_bathroom_vanity_0_E_body_1_P_a85978e2d42ee7dd_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathroom_vanity_1767940502_E_body_1_combined_tex" mesh="bathroom_bathroom_vanity_0_E_body_1_P_a85978e2d42ee7dd_visual_visual_mesh" group="1" />
+        <body name="bathroom_bathroom_vanity_0_E_door_3_11">
+          <geom name="bathroom_bathroom_vanity_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_tex" mesh="bathroom_bathroom_vanity_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bathroom_bathroom_vanity_0_E_door_4_14">
+          <geom name="bathroom_bathroom_vanity_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathroom_vanity_1767940502_E_door_3_11_combined_tex" mesh="bathroom_bathroom_vanity_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bathroom_bathroom_vanity_0_E_drawer_1_17">
+          <geom name="bathroom_bathroom_vanity_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_tex" mesh="bathroom_bathroom_vanity_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="bathroom_bathroom_vanity_0_E_drawer_2_24">
+          <geom name="bathroom_bathroom_vanity_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bathroom_vanity_1767940502_E_drawer_1_17_combined_tex" mesh="bathroom_bathroom_vanity_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual_mesh" group="1" />
+        </body>
+      </body>
+      <geom name="bathroom_bathroom_vanity_0_static_collision" type="box" pos="0 0 0.4334076" size="0.3245269 0.1543013 0.4334076" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_mirror_0" pos="-0.05 1.20074 1.45092" quat="0.707107 0 0 0.707107">
+      <body name="bathroom_mirror_0_base_link">
+        <geom name="bathroom_mirror_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_mirror_1767941986_mirror_tex" mesh="bathroom_mirror_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_mirror_0_static_collision" type="box" pos="0 0.008881415 0" size="0.325 0.008881415 0.4581187" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_towel_bar_0" pos="-2.15 2.00052 1.19951" quat="0.707107 0 0 -0.707107">
+      <body name="bathroom_towel_bar_0_base_link">
+        <geom name="bathroom_towel_bar_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_towel_bar_1767941986_towel_bar_tex" mesh="bathroom_towel_bar_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_towel_bar_0_static_collision" type="box" pos="0 0.0189575 0" size="0.4 0.0189575 0.05289952" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_print_0" pos="-0.700493 0.8 1.45">
+      <body name="bathroom_print_0_base_link">
+        <geom name="bathroom_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_print_1767941986_print_tex" mesh="bathroom_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_print_0_static_collision" type="box" pos="0 0.0161492 0" size="0.275 0.01614915 0.3737291" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_abstract_print_0" pos="-1.776 3.2 1.45" quat="0 0 0 1">
+      <body name="bathroom_abstract_print_0_base_link">
+        <geom name="bathroom_abstract_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_abstract_print_1767941986_abstract_print_tex" mesh="bathroom_abstract_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_abstract_print_0_static_collision" type="box" pos="0 0.01095671 0" size="0.21 0.01095671 0.3120137" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_abstract_print_1" pos="-0.356 3.2 1.45" quat="0 0 0 1">
+      <body name="bathroom_abstract_print_1_base_link">
+        <geom name="bathroom_abstract_print_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_abstract_print_1767941986_abstract_print_tex" mesh="bathroom_abstract_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_abstract_print_1_static_collision" type="box" pos="0 0.01095671 0" size="0.21 0.01095671 0.3120137" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_recessed_light_0" pos="-1.1 1.65 2.7">
+      <body name="bathroom_recessed_light_0_base_link">
+        <geom name="bathroom_recessed_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_recessed_light_1767942915_recessed_light_tex" mesh="bathroom_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_recessed_light_0_static_collision" type="box" pos="0 0 -0.003096295" size="0.08 0.07066111 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_recessed_light_1" pos="-1.65026 2.3485 2.7">
+      <body name="bathroom_recessed_light_1_base_link">
+        <geom name="bathroom_recessed_light_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_recessed_light_1767942915_recessed_light_tex" mesh="bathroom_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_recessed_light_1_static_collision" type="box" pos="0 0 -0.003096295" size="0.08 0.07066111 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_recessed_light_2" pos="-0.55 1.15 2.7">
+      <body name="bathroom_recessed_light_2_base_link">
+        <geom name="bathroom_recessed_light_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_recessed_light_1767942915_recessed_light_tex" mesh="bathroom_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_recessed_light_2_static_collision" type="box" pos="0 0 -0.003096295" size="0.08 0.07066111 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_ceiling_vent_grille_0" pos="-1.65127 2.89716 2.7">
+      <body name="bathroom_ceiling_vent_grille_0_base_link">
+        <geom name="bathroom_ceiling_vent_grille_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_ceiling_vent_grille_1767942915_ceiling_vent_grille_tex" mesh="bathroom_ceiling_vent_grille_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_ceiling_vent_grille_0_static_collision" type="box" pos="0 0 -0.01601968" size="0.14 0.1339976 0.01601968" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_recessed_light_3" pos="-0.55 2.35 2.7">
+      <body name="bathroom_recessed_light_3_base_link">
+        <geom name="bathroom_recessed_light_3_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_recessed_light_1767942915_recessed_light_tex" mesh="bathroom_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_recessed_light_3_static_collision" type="box" pos="0 0 -0.003096295" size="0.08 0.07066111 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_soap_dish_0_s0_0" pos="-0.164085 1.32924 0.784516" quat="0.706794 0.000693603 0.00036241 0.707419">
+      <body name="bathroom_soap_dish_0_s0_0_base_link">
+        <geom name="bathroom_soap_dish_0_s0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_soap_dish_1767943943_soap_dish_tex" mesh="bathroom_soap_dish_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_soap_dish_0_s0_0_static_collision" type="box" pos="0 0 0.00750754" size="0.055 0.0251302 0.00750754" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_bar_soap_0_s0_1" pos="-0.164069 1.32923 0.79874" quat="0.706724 0.000674422 0.000557488 0.707489">
+      <body name="bathroom_bar_soap_0_s0_1_base_link">
+        <geom name="bathroom_bar_soap_0_s0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_bar_soap_1767943943_bar_soap_tex" mesh="bathroom_bar_soap_0_s0_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_bar_soap_0_s0_1_static_collision" type="box" pos="0 0 0.01381897" size="0.0425 0.02537592 0.01381897" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_catchall_dish_0" pos="-0.164609 0.970867 0.784776" quat="0.707132 -0.00301058 -0.000245063 0.707075">
+      <body name="bathroom_catchall_dish_0_base_link">
+        <geom name="bathroom_catchall_dish_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_catchall_dish_1767944454_catchall_dish_tex" mesh="bathroom_catchall_dish_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_catchall_dish_0_static_collision" type="box" pos="0 0 0.01046533" size="0.06 0.0600628 0.01046533" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_pump_bottle_0" pos="-1.71655 2.53937 0.155142" quat="0.480473 0.555367 -0.43725 -0.519159">
+      <body name="bathroom_pump_bottle_0_base_link">
+        <geom name="bathroom_pump_bottle_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_pump_bottle_1767944718_pump_bottle_tex" mesh="bathroom_pump_bottle_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_pump_bottle_0_static_collision" type="box" pos="0 0 0.08664384" size="0.035 0.03579059 0.08664384" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="bathroom_body_wash_0" pos="-1.88485 2.3572 0.150691" quat="0.664078 -0.677467 0.219628 -0.227602">
+      <body name="bathroom_body_wash_0_base_link">
+        <geom name="bathroom_body_wash_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="bathroom_body_wash_1767944718_body_wash_tex" mesh="bathroom_body_wash_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="bathroom_body_wash_0_static_collision" type="box" pos="0 0 0.08280324" size="0.03 0.02801338 0.08280324" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <geom name="generated_perimeter_guard_0" type="box" pos="0 0.375 1.5" size="0.04 0.375 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_1" type="box" pos="0 3.625 1.5" size="0.04 0.375 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_2" type="box" pos="2.5 0 1.5" size="2.5 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_3" type="box" pos="2.5 4 1.5" size="2.5 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_4" type="box" pos="8.5 2 1.5" size="0.04 2 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_5" type="box" pos="6.75 0 1.5" size="1.75 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_6" type="box" pos="6.75 4 1.5" size="1.75 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_7" type="box" pos="-2.2 2 1.5" size="0.04 1.25 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_8" type="box" pos="-1.1 0.75 1.5" size="1.1 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    <geom name="generated_perimeter_guard_9" type="box" pos="-1.1 3.25 1.5" size="1.1 0.04 1.5" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+  </worldbody>
+  <contact>
+    <exclude name="selfcol_bedroom_wardrobe_0_E_body_1_bedroom_wardrobe_0_E_door_2_2" body1="bedroom_wardrobe_0_E_body_1" body2="bedroom_wardrobe_0_E_door_2_2" />
+    <exclude name="selfcol_bedroom_wardrobe_0_E_body_1_bedroom_wardrobe_0_E_door_1_3" body1="bedroom_wardrobe_0_E_body_1" body2="bedroom_wardrobe_0_E_door_1_3" />
+    <exclude name="selfcol_bedroom_wardrobe_0_E_door_2_2_bedroom_wardrobe_0_E_door_1_3" body1="bedroom_wardrobe_0_E_door_2_2" body2="bedroom_wardrobe_0_E_door_1_3" />
+    <exclude name="selfcol_bedroom_nightstand_0_E_door_1_bedroom_nightstand_0_E_body_3" body1="bedroom_nightstand_0_E_body_3" body2="bedroom_nightstand_0_E_door_1" />
+    <exclude name="selfcol_bedroom_nightstand_0_E_drawer_2_bedroom_nightstand_0_E_body_3" body1="bedroom_nightstand_0_E_body_3" body2="bedroom_nightstand_0_E_drawer_2" />
+    <exclude name="selfcol_bedroom_nightstand_0_E_door_1_bedroom_nightstand_0_E_drawer_2" body1="bedroom_nightstand_0_E_door_1" body2="bedroom_nightstand_0_E_drawer_2" />
+    <exclude name="selfcol_bedroom_nightstand_1_E_door_1_bedroom_nightstand_1_E_body_3" body1="bedroom_nightstand_1_E_body_3" body2="bedroom_nightstand_1_E_door_1" />
+    <exclude name="selfcol_bedroom_nightstand_1_E_drawer_2_bedroom_nightstand_1_E_body_3" body1="bedroom_nightstand_1_E_body_3" body2="bedroom_nightstand_1_E_drawer_2" />
+    <exclude name="selfcol_bedroom_nightstand_1_E_door_1_bedroom_nightstand_1_E_drawer_2" body1="bedroom_nightstand_1_E_door_1" body2="bedroom_nightstand_1_E_drawer_2" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_body_1_bathroom_bathroom_vanity_0_E_door_3_11" body1="bathroom_bathroom_vanity_0_E_body_1" body2="bathroom_bathroom_vanity_0_E_door_3_11" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_body_1_bathroom_bathroom_vanity_0_E_door_4_14" body1="bathroom_bathroom_vanity_0_E_body_1" body2="bathroom_bathroom_vanity_0_E_door_4_14" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_body_1_bathroom_bathroom_vanity_0_E_drawer_1_17" body1="bathroom_bathroom_vanity_0_E_body_1" body2="bathroom_bathroom_vanity_0_E_drawer_1_17" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_body_1_bathroom_bathroom_vanity_0_E_drawer_2_24" body1="bathroom_bathroom_vanity_0_E_body_1" body2="bathroom_bathroom_vanity_0_E_drawer_2_24" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_door_3_11_bathroom_bathroom_vanity_0_E_door_4_14" body1="bathroom_bathroom_vanity_0_E_door_3_11" body2="bathroom_bathroom_vanity_0_E_door_4_14" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_door_3_11_bathroom_bathroom_vanity_0_E_drawer_1_17" body1="bathroom_bathroom_vanity_0_E_door_3_11" body2="bathroom_bathroom_vanity_0_E_drawer_1_17" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_door_3_11_bathroom_bathroom_vanity_0_E_drawer_2_24" body1="bathroom_bathroom_vanity_0_E_door_3_11" body2="bathroom_bathroom_vanity_0_E_drawer_2_24" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_door_4_14_bathroom_bathroom_vanity_0_E_drawer_1_17" body1="bathroom_bathroom_vanity_0_E_door_4_14" body2="bathroom_bathroom_vanity_0_E_drawer_1_17" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_door_4_14_bathroom_bathroom_vanity_0_E_drawer_2_24" body1="bathroom_bathroom_vanity_0_E_door_4_14" body2="bathroom_bathroom_vanity_0_E_drawer_2_24" />
+    <exclude name="selfcol_bathroom_bathroom_vanity_0_E_drawer_1_17_bathroom_bathroom_vanity_0_E_drawer_2_24" body1="bathroom_bathroom_vanity_0_E_drawer_1_17" body2="bathroom_bathroom_vanity_0_E_drawer_2_24" />
+  </contact>
+</mujoco>

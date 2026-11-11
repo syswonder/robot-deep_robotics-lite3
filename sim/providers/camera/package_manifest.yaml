@@ -1,0 +1,18 @@
+manifestVersion: 1
+
+package:
+  name: robonix.primitive.lite3.sim.camera
+  version: 0.1.0
+  vendor: robonix
+  description: Registers the Lite3 MuJoCo RGB stream for Scene visualization.
+  license: Apache-2.0
+  tags: [primitive, camera, rgb, simulation, mujoco, lite3]
+
+capability_id: lite3_sim_camera
+
+build: bash scripts/build.sh
+start: bash scripts/start.sh
+
+capabilities:
+  - name: robonix/primitive/camera/rgb
+  - name: robonix/primitive/camera/intrinsics

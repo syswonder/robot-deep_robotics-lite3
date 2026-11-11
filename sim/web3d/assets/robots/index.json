@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "defaultRobot": "lite3",
+  "robots": [
+    "lite3"
+  ]
+}

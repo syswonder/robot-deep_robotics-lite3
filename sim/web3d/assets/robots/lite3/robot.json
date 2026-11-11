@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "lite3",
+  "label": "DeepRobotics Lite3",
+  "description": "Lite3 mirrored from the native Robonix MuJoCo runtime",
+  "model": "Lite3.xml",
+  "dragRootBody": null,
+  "files": "index.json",
+  "controlledActuators": [],
+  "sensors": {
+    "cameras": []
+  }
+}

@@ -2,32 +2,36 @@
 set -euo pipefail
 
 DEPLOY_DIR="$(cd "$(dirname "$0")" && pwd)"
-MANIFEST="${ROBONIX_MANIFEST:-$DEPLOY_DIR/robonix_manifest.yaml}"
-
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-export ROBONIX_DEPLOY_DIR="$DEPLOY_DIR"
-export UV_CACHE_DIR="${UV_CACHE_DIR:-$DEPLOY_DIR/.cache/uv}"
-export PIP_CACHE_DIR="${PIP_CACHE_DIR:-$DEPLOY_DIR/.cache/pip}"
-
-if [[ -f "$DEPLOY_DIR/.env" ]]; then
-  set -a
-  # shellcheck disable=SC1091
-  source "$DEPLOY_DIR/.env"
-  set +a
-fi
-
-[[ -f "/opt/ros/humble/setup.bash" ]] || {
-  echo "missing /opt/ros/humble/setup.bash; install ROS 2 Humble" >&2
-  exit 1
-}
-set +u
 # shellcheck disable=SC1091
-source /opt/ros/humble/setup.bash
-set -u
+source "$DEPLOY_DIR/scripts/common.sh"
 
-command -v rbnx >/dev/null 2>&1 || {
-  echo "rbnx not found; install Robonix and check PATH" >&2
-  exit 1
-}
+mode=""
+declare -a rbnx_args=()
+while (($#)); do
+  case "$1" in
+    --mode)
+      (($# >= 2)) || { echo "--mode requires a value" >&2; exit 2; }
+      mode="$2"; shift 2 ;;
+    --mode=*) mode="${1#*=}"; shift ;;
+    -h|--help)
+      echo "usage: $0 --mode {hardware|simulation} [rbnx build options]"
+      exit 0 ;;
+    *) rbnx_args+=("$1"); shift ;;
+  esac
+done
 
-exec rbnx build -f "$MANIFEST" "$@"
+require_mode "$mode"
+load_deployment_env
+require_rbnx
+manifest="$(deployment_manifest "$mode")"
+validate_deployment_manifest "$mode" "$manifest"
+
+echo "[build] mode=$mode manifest=$manifest"
+if [[ "$mode" == "simulation" ]]; then
+  export RBNX_CODEGEN_PYTHON="$ROBONIX_PYTHON_ENV/bin/python"
+  # rbnx must fetch URL packages before Docker Compose evaluates the primitive
+  # cache bind mount; otherwise Compose creates an empty directory first.
+  rbnx build --no-update-check -f "$manifest" "${rbnx_args[@]}"
+  exec "$DEPLOY_DIR/sim/manage.sh" build
+fi
+exec rbnx build --no-update-check -f "$manifest" "${rbnx_args[@]}"

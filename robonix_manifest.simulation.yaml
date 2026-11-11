@@ -1,0 +1,167 @@
+manifestVersion: 1
+name: robonix-lite3-deploy-simulation
+
+catalog:
+  name: robonix.robot.deep_robotics.lite3
+  version: 0.2.0
+  description: Robonix MuJoCo simulation deployment for the Deep Robotics Lite3.
+  license: Apache-2.0
+  tags: [robot, deploy, deep_robotics, lite3, quadruped, simulation, mapping, navigation]
+  maintainers:
+    - Bunnycxk <2501213313@stu.pku.edu.cn>
+
+env:
+  ROS_DOMAIN_ID: "42"
+  RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+  ROBONIX_RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+  ROBONIX_LITE3_MODE: simulation
+  LITE3_SIM_CONTAINER: lite3-sim
+  ROBONIX_ATLAS: 127.0.0.1:50051
+  ROBONIX_META_GRPC_ENDPOINT: 127.0.0.1:50051
+  ROBONIX_MAPPING_FORCE: docker
+  ROBONIX_NAV2_FORCE: docker
+  ROBONIX_SCENE_FORCE: docker
+  ROBONIX_SCENE_ROS_DISTRO: humble
+  MAPPING_MAPS_DIR: ${ROBONIX_DEPLOY_DIR}/maps
+  SCENE_WEB_HOST: 127.0.0.1
+  SCENE_WEB_PORT: "50107"
+  SCENE_GRAPH_ENABLED: "false"
+  SCENE_OBJECT_MEMORY_ENABLED: "false"
+  SCENE_PERCEPTION_WAIT_S: "0"
+
+system:
+  atlas: {listen: 127.0.0.1:50051, log: info}
+  executor: {listen: 127.0.0.1:50061, log: info}
+  pilot:
+    listen: 127.0.0.1:50071
+    log: info
+    vlm:
+      upstream: ${VLM_BASE_URL}
+      api_key: ${VLM_API_KEY}
+      model: ${VLM_MODEL}
+      api_format: openai
+  liaison: {listen: 127.0.0.1:50081, log: info}
+  soma:
+    listen: 127.0.0.1:50091
+    provider_id: soma
+    robot_yaml: ${ROBONIX_DEPLOY_DIR}/soma.yaml
+    runtime_reader_command:
+      - docker
+      - exec
+      - -i
+      - lite3-sim
+      - bash
+      - -lc
+      - source /opt/ros/humble/setup.bash && exec python3 -u "$0" "$1"
+      - "{script}"
+      - "{config}"
+    log: info
+  scene:
+    manifest: ${ROBONIX_DEPLOY_DIR}/sim/scene/package_manifest.yaml
+    log: info
+    camera_provider_id: lite3_sim_camera
+    base_frame: base_link
+    web_host: 127.0.0.1
+    web_port: 50107
+
+primitive:
+  - name: lite3_quadruped
+    url: https://github.com/syswonder/primitive-deep_robotics-lite3_quadruped.git
+    branch: main
+    config:
+      backend: simulation
+      odom_frame: odom
+      base_frame: base_link
+      odom_topic: /odom
+      twist_in_topic: /cmd_vel
+      publish_odom_tf: true
+      sentinel_timeout_s: 30.0
+      use_sim_time: true
+
+  - name: lite3_sim_lidar
+    path: ${ROBONIX_DEPLOY_DIR}/sim/providers/lidar
+    config:
+      scan_topic: /scanner/scan
+      cloud_topic: /scanner/cloud
+      sentinel_timeout_s: 30.0
+
+  - name: lite3_sim_camera
+    path: ${ROBONIX_DEPLOY_DIR}/sim/providers/camera
+    config:
+      rgb_topic: /camera/color/image_raw
+      intrinsics_topic: /camera/color/camera_info
+      sentinel_timeout_s: 30.0
+
+service:
+  # Active profile: 2D pose-graph SLAM plus static Top-K global scan matching.
+  # If a stationary scan is ambiguous, AMCL provides the motion-based fallback.
+  - name: mapping
+    url: https://github.com/syswonder/service-map-rbnx
+    branch: main
+    config:
+      algo: slam_toolbox
+      localizer: amcl
+      localizer_particles: {min: 1000, max: 8000}
+      base_frame: base_link
+      odom_frame: odom
+      use_sim_time: true
+      # First build a map in mapping mode and save it as lite3_house_187.
+      # For a cold-start global-localization test, replace the next line with:
+      # map_mode: localization
+      # map_id: lite3_house_187
+      map_mode: localization
+      map_id: lite3_house_manual_v1
+      # map_mode: mapping
+      slam_toolbox_params:
+        min_travel_m: 0.10
+        min_heading_rad: 0.10
+        scan_buffer: 40
+        loop_search_m: 4.0
+      webui_host: 127.0.0.1
+      webui_port: 8091
+      sensor_providers:
+        lidar2d: lite3_sim_lidar
+        odom: lite3_quadruped
+
+  # Retained RTAB-Map alternative. Disable the active mapping block above and
+  # uncomment this block; never enable two providers named mapping together.
+  # - name: mapping
+  #   url: https://github.com/syswonder/service-map-rbnx
+  #   branch: main
+  #   config:
+  #     algo: rtabmap
+  #     base_frame: base_link
+  #     odom_frame: odom
+  #     use_sim_time: true
+  #     map_mode: mapping
+  #     params_file: ${ROBONIX_DEPLOY_DIR}/config/rtabmap_params_sim.yaml
+  #     webui_host: 127.0.0.1
+  #     webui_port: 8091
+  #     sensor_providers:
+  #       lidar2d: lite3_sim_lidar
+  #       odom: lite3_quadruped
+
+  - name: nav2
+    url: https://github.com/syswonder/service-navigation-rbnx
+    branch: main
+    config:
+      params_file: ${ROBONIX_DEPLOY_DIR}/config/nav2_params_lite3_sim.yml
+      bt_xml_file: ${ROBONIX_DEPLOY_DIR}/config/navigate.xml
+      use_sim_time: true
+      action_wait_s: 120.0
+      dynamic_speed:
+        max_linear_speed_mps: 0.35
+        default_percentage: 100
+        step_percentage: 20
+        min_percentage: 20
+      scan_projection: {enabled: false}
+      provider_ids:
+        map: mapping
+        odom: lite3_quadruped
+        scan: lite3_sim_lidar
+
+skill:
+  - name: explore
+    url: https://github.com/syswonder/skill-explore-rbnx
+    branch: main
+    config: {}

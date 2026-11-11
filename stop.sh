@@ -2,93 +2,71 @@
 set -euo pipefail
 
 DEPLOY_DIR="$(cd "$(dirname "$0")" && pwd)"
-MANIFEST="${ROBONIX_MANIFEST:-$DEPLOY_DIR/robonix_manifest.yaml}"
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-export ROBONIX_DEPLOY_DIR="$DEPLOY_DIR"
-
-if [[ -f "$DEPLOY_DIR/.env" ]]; then
-  set -a
-  # shellcheck disable=SC1091
-  source "$DEPLOY_DIR/.env"
-  set +a
-fi
-
-[[ -f "/opt/ros/humble/setup.bash" ]] || {
-  echo "missing /opt/ros/humble/setup.bash; install ROS 2 Humble" >&2
-  exit 1
-}
-set +u
 # shellcheck disable=SC1091
-source /opt/ros/humble/setup.bash
-set -u
+source "$DEPLOY_DIR/scripts/common.sh"
 
-command -v rbnx >/dev/null 2>&1 || {
-  echo "rbnx not found; install Robonix and check PATH" >&2
-  exit 1
-}
+mode=""
+while (($#)); do
+  case "$1" in
+    --mode)
+      (($# >= 2)) || { echo "--mode requires a value" >&2; exit 2; }
+      mode="$2"; shift 2 ;;
+    --mode=*) mode="${1#*=}"; shift ;;
+    -h|--help)
+      echo "usage: $0 --mode {hardware|simulation}"
+      exit 0 ;;
+    *) echo "unknown option: $1" >&2; exit 2 ;;
+  esac
+done
+require_mode "$mode"
+load_deployment_env
+mkdir -p "$RUN_DIR"
 
-CACHE_ROOT="$DEPLOY_DIR/rbnx-boot/cache"
-
-collect_deployment_pids() {
-  local pid cwd
-  while read -r pid; do
-    [[ "$pid" =~ ^[0-9]+$ ]] || continue
-    [[ "$pid" != "$$" && "$pid" != "$PPID" ]] || continue
-    cwd="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
-    if [[ "$cwd" == "$CACHE_ROOT" || "$cwd" == "$CACHE_ROOT/"* ]]; then
-      printf '%s\n' "$pid"
-    fi
-  done < <(ps -u "$(id -u)" -o pid=)
-}
-
-terminate_deployment_orphans() {
-  local -a pids=() alive=()
-  local pid
-  mapfile -t pids < <(collect_deployment_pids)
-  ((${#pids[@]})) || return 0
-
-  echo "[stop] terminating deployment-owned residual processes: ${pids[*]}"
-  kill -TERM "${pids[@]}" 2>/dev/null || true
-  for _ in {1..30}; do
-    alive=()
-    for pid in "${pids[@]}"; do
-      kill -0 "$pid" 2>/dev/null && alive+=("$pid")
-    done
-    ((${#alive[@]} == 0)) && break
-    sleep 0.2
-  done
-
-  if ((${#alive[@]})); then
-    echo "[stop] force-killing deployment-owned residual processes: ${alive[*]}"
-    kill -KILL "${alive[@]}" 2>/dev/null || true
+if [[ -f "$RUN_DIR/mode" ]]; then
+  active="$(cat "$RUN_DIR/mode")"
+  if [[ "$active" != "$mode" ]]; then
+    echo "refusing to stop mode=$mode while mode=$active is active" >&2
+    exit 1
   fi
-}
+fi
 
-# Normal teardown is authoritative. Do not match and kill generic ROS/Nav2
-# process names because another deployment may be using the same host.
-if [[ -f "$DEPLOY_DIR/rbnx-boot/state.json" ]]; then
-  rbnx shutdown -f "$MANIFEST" "$@"
+manifest="$(deployment_manifest "$mode")"
+if [[ -f "$RUN_DIR/state.json" && -f "$manifest" ]]; then
+  if command -v rbnx >/dev/null 2>&1; then
+    rbnx shutdown -f "$manifest" || true
+  else
+    echo "[stop] warning: rbnx unavailable; continuing scoped cleanup" >&2
+  fi
+fi
+
+if [[ "$mode" == "simulation" ]]; then
+  "$DEPLOY_DIR/sim/manage.sh" down
 else
-  echo "[stop] no Robonix boot state; checking deployment-owned residuals"
+  cache_root="$RUN_DIR/cache"
+  mapfile -t pids < <(
+    for pid in $(ps -u "$(id -u)" -o pid=); do
+      cwd="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
+      [[ "$cwd" == "$cache_root" || "$cwd" == "$cache_root/"* ]] && echo "$pid"
+    done
+  )
+  if ((${#pids[@]})); then
+    kill -TERM "${pids[@]}" 2>/dev/null || true
+  fi
+  router_pid_file="$RUN_DIR/rmw_zenohd.hardware.pid"
+  if [[ -f "$router_pid_file" ]]; then
+    router_pid="$(cat "$router_pid_file")"
+    if [[ "$router_pid" =~ ^[0-9]+$ ]]; then
+      kill -TERM "$router_pid" 2>/dev/null || true
+      wait "$router_pid" 2>/dev/null || true
+    fi
+    rm -f "$router_pid_file"
+  fi
+  if ss -H -lunp 2>/dev/null | awk '$5 ~ /:43897$/ { found=1 } END { exit !found }'; then
+    echo "[stop] ERROR: UDP 43897 is still occupied" >&2
+    exit 1
+  fi
 fi
 
-# A package wrapper can fail before Robonix records or tears down all of its
-# ROS children. Match residuals by cwd under this deployment's cache, not by
-# generic ROS/Nav2 process names, so other deployments on the host are safe.
-terminate_deployment_orphans
-
-# Fast DDS' cleaner removes stale shared-memory artifacts while preserving
-# segments that still belong to live participants.
-if [[ "$RMW_IMPLEMENTATION" == "rmw_fastrtps_cpp" && -x /opt/ros/humble/bin/fastdds ]]; then
-  /opt/ros/humble/bin/fastdds shm clean >/dev/null 2>&1 || true
-fi
-
-# jetson2motion must exclusively bind the Lite3 feedback port. Never kill an
-# unknown owner here; report it so the operator can inspect it safely.
-if ss -H -lunp 2>/dev/null | awk '$5 ~ /:43897$/ { found=1 } END { exit !found }'; then
-  echo "[stop] ERROR: UDP 43897 is still occupied after scoped cleanup" >&2
-  ss -H -lunp 2>/dev/null | awk '$5 ~ /:43897$/' >&2
-  exit 1
-fi
-
-echo "[stop] deployment stopped cleanly"
+archive_robonix_logs "$mode"
+rm -f "$RUN_DIR/mode"
+echo "[stop] mode=$mode stopped cleanly"

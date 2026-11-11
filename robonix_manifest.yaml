@@ -73,6 +73,7 @@ primitive:
     url: https://github.com/syswonder/primitive-deep_robotics-lite3_quadruped.git
     branch: main
     config:
+      backend: hardware
       odom_frame: odom
       base_frame: base_link
       odom_topic: /odom
@@ -204,7 +205,7 @@ service:
   # Never enable both mapping services or both scan publishers.
   # - name: mapping
   #   url: https://github.com/syswonder/service-map-rbnx
-  #   branch: feat/map-localizer
+  #   branch: main
   #   manifest: package_manifest.jetson-native.yaml
   #   config:
   #     algo: slam_toolbox

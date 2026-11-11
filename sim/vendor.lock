@@ -1,0 +1,22 @@
+# Reproducible upstream inputs for the complete simulation.
+# Update these hashes deliberately and rerun the simulation acceptance checks.
+
+robonix_repository=https://github.com/syswonder/robonix.git
+robonix_commit=223675d9a5000e70debae4f2512404cec5c9c442
+
+simulation_repository=https://github.com/DeepRoboticsLab/Lite3_rl_deploy.git
+simulation_commit=1c4a8f14c9c531903fa5a26783e3f9b99d1039d9
+
+model_repository=https://github.com/DeepRoboticsLab/deep_robotics_model.git
+model_commit=b452a1f404d37155400242f18e454fed8bcc51b8
+
+mapping_repository=https://github.com/syswonder/service-map-rbnx.git
+mapping_branch=main
+mapping_commit=6fbac47eca8bec12e2d255a6442c80da37621dfa
+
+scene_repository=https://github.com/syswonder/robot-agilex-ranger_with_piper_mujoco.git
+scene_commit=1764366ce304d88bf8024e53baf99575e6a7d521
+scene_environment=scenesmith_house_187
+
+# The Lite3 primitive, navigation, and exploration packages remain unmodified
+# and are resolved from their official GitHub main branches.

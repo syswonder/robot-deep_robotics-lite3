@@ -1,0 +1,32 @@
+{
+  "name": "mujoco-robonix",
+  "version": "3.3.8",
+  "private": true,
+  "type": "module",
+  "description": "Robonix body package for a Web or native MuJoCo Ranger Mini V3 with Piper",
+  "scripts": {
+    "serve": "python3 ./scripts/serve.py --port 5180 --bind 0.0.0.0"
+  },
+  "keywords": [
+    "mujoco",
+    "robonix",
+    "ranger",
+    "piper",
+    "robotics",
+    "wasm",
+    "native"
+  ],
+  "author": "Chen Yanting",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@sparkjsdev/spark": "^2.0.0",
+    "mujoco-js": "^0.0.7",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

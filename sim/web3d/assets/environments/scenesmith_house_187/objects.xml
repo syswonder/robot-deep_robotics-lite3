@@ -1,0 +1,25 @@
+<mujoco model="scenesmith_house_187_objects">
+  <worldbody>
+    <body name="task_tv_remote" pos="3.27 3.14 0.563" quat="0.1092 -9.60923e-05 -0.00130756 -0.994019">
+      <freejoint name="task_tv_remote_freejoint" />
+      <body name="living_room_tv_remote_control_0_base_link">
+        <geom name="living_room_tv_remote_control_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_tv_remote_control_1767931640_tv_remote_control_tex" mesh="living_room_tv_remote_control_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="task_tv_remote_collision" type="box" pos="0 0 0.006142405" size="0.025 0.08629337 0.006142405" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.03 0.003" density="500" />
+    </body>
+    <body name="task_water_glass" pos="3.21346 3.32963 0.562656" quat="0.990189 -0.000400146 -0.000844407 0.139735">
+      <freejoint name="task_water_glass_freejoint" />
+      <body name="living_room_water_glass_tumbler_0_base_link">
+        <geom name="living_room_water_glass_tumbler_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_water_glass_tumbler_1767931913_water_glass_tumbler_tex" mesh="living_room_water_glass_tumbler_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="task_water_glass_collision" type="box" pos="0 0 0.06885102" size="0.04 0.03799948 0.06885102" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.03 0.003" density="320" />
+    </body>
+    <body name="task_succulent" pos="3.04306 3.1714 0.562858" quat="0.976439 0.000247464 0.00131793 -0.215788">
+      <freejoint name="task_succulent_freejoint" />
+      <body name="living_room_potted_succulent_plant_0_base_link">
+        <geom name="living_room_potted_succulent_plant_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_potted_succulent_plant_1767932104_potted_succulent_plant_tex" mesh="living_room_potted_succulent_plant_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="task_succulent_collision" type="box" pos="0 0 0.05265741" size="0.05 0.04997967 0.05265741" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.03 0.003" density="420" />
+    </body>
+  </worldbody>
+</mujoco>

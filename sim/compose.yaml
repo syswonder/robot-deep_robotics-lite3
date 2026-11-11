@@ -1,0 +1,38 @@
+services:
+  lite3-sim:
+    build:
+      context: ./runtime
+    image: robonix-lite3-sim:humble
+    working_dir: /workspace/Lite3_rl_deploy
+    user: "${SIM_UID:-1000}:${SIM_GID:-1000}"
+    group_add:
+      - "${RENDER_GID:-993}"
+    environment:
+      HOME: /tmp/lite3-sim-home
+      MUJOCO_GL: egl
+      FASTRTPS_DEFAULT_PROFILES_FILE: /etc/fastrtps_no_shm.xml
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-42}"
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      ROBONIX_RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      ROBONIX_ATLAS: 127.0.0.1:50051
+      ROBONIX_META_GRPC_ENDPOINT: 127.0.0.1:50051
+      LITE3_VIEWER: "${LITE3_VIEWER:-headless}"
+      LITE3_VIEWER_PORT: "${LITE3_VIEWER_PORT:-8080}"
+      LITE3_ENVIRONMENT: "${LITE3_ENVIRONMENT:-scenesmith_house_187}"
+      LITE3_SPAWN_X: "${LITE3_SPAWN_X:-}"
+      LITE3_SPAWN_Y: "${LITE3_SPAWN_Y:-}"
+      LITE3_SPAWN_YAW: "${LITE3_SPAWN_YAW:-}"
+      LITE3_WEB3D_ROOT: "${ROBONIX_DEPLOY_DIR}/sim/web3d"
+    devices:
+      - /dev/dri:/dev/dri
+    network_mode: host
+    volumes:
+      - ${LITE3_VENDOR_DIR}:/workspace/Lite3_rl_deploy
+      - ${ROBONIX_DEPLOY_DIR}/rbnx-boot/cache/primitive-deep_robotics-lite3_quadruped:/workspace/primitive-deep_robotics-lite3_quadruped
+      - ${ROBONIX_SOURCE_DIR}:/workspace/robonix:ro
+      # Soma expands {script}/{config} to host absolute paths. Mirror those
+      # paths so its ROS runtime reader can execute inside this container.
+      - ${ROBONIX_DEPLOY_DIR}:${ROBONIX_DEPLOY_DIR}
+      - ${ROBONIX_SOURCE_DIR}:${ROBONIX_SOURCE_DIR}:ro
+      - ./runtime:/workspace/lite3-runtime:ro
+      - ./validation:/workspace/lite3-validation:ro

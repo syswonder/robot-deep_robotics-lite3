@@ -2,10 +2,11 @@ rbnx-build/
 rbnx-boot/
 .env
 .cache/
-.run/
 logs/
+maps/
 .vscode/
 .idea/
 *.swp
 __pycache__/
 .pytest_cache/
+sim/web3d/node_modules/
